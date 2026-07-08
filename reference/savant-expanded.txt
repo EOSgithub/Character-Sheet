@@ -1,0 +1,1039 @@
+===== PAGE 1 =====
+The Savant ExpandedThe Savant ExpandedThe Savant ExpandedThe Savant ExpandedThe Savant Expanded
+
+
+===== PAGE 2 =====
+The SavantThe SavantClass: ExpandedClass: Expanded
+The Savant is an Intelligence-based, non-magical class that
+focuses on gathering information and supporting their allies.
+Provided here are a multitude of additional Savant options:
+Personality & Quirks. Use these roleplaying tables to
+randomly determine your Savant's quirks and personality,
+take what you like, or use the options here for inspiration
+Scholarly Feats. It is no secret that Intelligence is the
+ability score with the least useful and synergistic options for
+Feats. The Feats presented here look to solve that problem!
+Magic Items. Enhance your loot with a variety of magic
+items of all rarities designed specifically for the Savant.
+Additional Academic Disciplines. Included below are six
+additional Disciplines for Savants to choose from: Culinarian,
+Mentor, Orator, Philosopher, Rune Scribe, and Virtuoso!
+Additional Scholarly Pursuits. Finally, included here are
+a multitude of additional Pursuits for your Savant to master.
+Personality & QuirksPersonality & Quirks
+Having trouble creating a personality for your Savant, or just
+looking for inspiration? Choose an Obsession, Eccentricity,
+and an Irrational Fear from the tables presented here.
+ObsessionsObsessions
+In their desire to answer every question, Savants can develop
+obsessions. These inexplicable questions and phenomena
+gnaw at a Savant until they find the answers that they seek.
+d4 Obsession
+1 You discovered a strange script in the marginof a book. The best scholars cannot identify it.
+2 As a child you saw a majestic golden bird flyacross the sky that left a rainbow in its wake.
+3 Your father charged you to find the legendary,and most likely fictional, chalice of Bahamut.
+4 You use the word " inconceivable "  all the timeeven though you aren't exactly sure what it means
+EccentricitiesEccentricities
+Often, with great intellect and intense mental focus comes
+some strange habits. A Savant's eccentricities are usually the
+result of them spending too much time on their field of study.
+d6 Eccentricity
+1 You assume that every person you talk to caresabout the minutia of your area of expertise.
+2 You have a really bad habit of only speakingin the technical jargon of your field.
+3 You don't understand children.
+4 When someone doesn't understand somethingyou just haven't explained it enough times.
+5 You take diligent notes on everythingeven when it isn't socially appropriate.
+6 You are so dedicated to your field of study thatyou find yourself explaining things to your foes.
+Good Luck CharmsGood Luck Charms
+Often, despite their intellect, Savants develop attachments to
+mundane charms, objects, or clothing they perceive as lucky.
+d6 Lucky Trinket
+1 You refuse to place your faith in a single deityso you carry a multitude of holy symbols.
+2 Your father was a farmer who paid for youreducation. You wear his hat in his memory.
+3 Despite its ineffectiveness, you carry awhip to impress and intimidate others.
+4 You carry a scroll of insane ramblings. Oneday you will figure out its meaning.
+5 You wear a pair of crystal spectacleseven though you have perfect vision.
+6 You never leave home without a copy ofyour mentor's thesis on owlbear anatomy.
+
+
+===== PAGE 3 =====
+Irrational FearsIrrational Fears
+Despite their impressive minds, Savants tend to develop fears
+that anyone with common sense would find totally irrational.
+d6 Irrational Fear
+1 You are convinced you contracted a minor formof lycanthropy from a dog that bit you as a child.
+2 You will do literally anything toavoid interacting with fire magic.
+3 You always make sure to sleep with a silvercoin in your hand to ward off night hags.
+4 You hate snakes and snake-like creatures.
+5 You are so afraid of undead that the sightof them causes you to vomit.
+6 You give out code words to your allies sothey can prove they aren't doppelgangers.
+Scholarly FeatsScholarly Feats
+If your group uses the optional rule for Feats, the following
+Feats are available alongside those in the Player's Handbook:
+Classical ArtistClassical Artist
+Your great intellect has allowed you to master what many
+would consider the fine arts. You gain the following benefits:
+Increase your Intelligence score by 1, to a maximum of 20.
+You gain proficiency with both mason's tools and painter's
+supplies. Whenever you make an ability check with either
+tool, you can treat a roll of 9 or lower on the d20 as a 10.
+You can use mason's tools or painter's supplies and the
+appropriate materials to create a work of fine art worth
+50 gp for each 8-hour workday you spend working on it.
+You have advantage on checks to assess the value of art.
+Helpful InsightsHelpful Insights
+You always seem to have helpful advice for
+any situation. You gain the benefits below:
+You increase your Intelligence or Wisdom
+score by 1, up to a maximum of 20.
+You can take the Help action as a bonus
+action on each of your turns.
+When you use a Help action to give
+advantage on an ability check with
+a skill or tool you are proficient in,
+the target can treat a result of 7
+or lower on the d20 as an 8.
+Lifelong LearnerLifelong Learner
+You have made a vow to never stop learning, no matter how
+old or educated you become. You gain the benefits from the
+table below that correspond to your Intelligence modifier and
+lower. If your Intelligence modifier increases, the benefits you
+gain from this Feat also increase with your modifier:
+Modifier Benefit
++1 You learn to speak, read, and write oneadditional language of your choice.
++2 You gain proficiency with one setof artisan's tools of your choice.
++3 You gain proficiency in one skill of your choice.
++4 For one skill proficiency of your choice, youtreat a roll of 7 or lower on the d20 as an 8.
++5 Whenever you are forced to make a Wisdomsaving throw, you can choose to make anIntelligence saving throw instead.
+Mental AcuityMental Acuity
+Your mind is a wonderful thing, capable of bursts of insight
+and mental fortitude. You gain the following benefits:
+Increase your Intelligence score by 1, to a maximum of 20.
+You gain proficiency in two of the following skills: Arcana,
+History, Investigation, Medicine, Nature, or Religion.
+Choose any two skills from the list above. Whenever you
+make an ability check with either of the chosen skills you
+can treat a roll of 7 or lower on the d20 as an 8.
+Scholar of LoreScholar of Lore
+You have spent time learning everything there is to know
+about a specific area of study. You gain the following benefits:
+Increase your Intelligence score by 1, to a maximum of 20.
+You master a Scholarly Pursuit of your choice from those
+available to the Savant. If the Pursuit has a Savant level
+prerequisite, you can learn it if your total level meets or
+exceeds the prerequisite level for that Scholarly Pursuit.
+If the Scholarly Pursuit requires that you roll an Intellect
+Die, you roll a d4 unless
+your Intellect Die
+is higher.
+
+
+===== PAGE 4 =====
+Magic ItemsMagic Items
+Consider adding the following scholarly magic items to your
+game, particularly if one of your players is playing a Savant.
+Blade of the ScribeBlade of the Scribe
+Weapon (rapier), rare (requires attunement by a Savant)
+The handle of this elegant rapier is fashioned from silver and
+steel, and the hollow blade is filled with ink. It bears an Elvish
+inscription that, when translated, reads "The pen is mightier
+than the sword, but this is mightier still". You gain a +1 bonus
+to both attack and damage rolls with this magic weapon.
+This magic rapier has 4 Charges. When you hit a target
+with this weapon, you can expend 1 Charge to release a blast
+of ink. The target must succeed on a DC 15 Dexterity saving
+throw or be blinded for 1 minute. This effect ends early if the
+creature uses its action to wipe the ink from its eyes.
+This magic rapier regains 1d4 Charges daily, at dawn.
+Doctoral RobesDoctoral Robes
+Wondrous item, legendary (requires attunement by a Savant)
+These luxurious robes were fashioned by a long-forgotten
+empire for the headmaster of an academy of higher learning.
+While attuned to the robes you gain the following benefits:
+So long as you are not wearing any armor, your Armor
+Class is equal to 15 + your Intelligence modifier.
+When you are forced to make a saving throw you gain a
+bonus to your roll equal to your Intelligence modifier.
+When another creature that can hear you within 30 feet
+makes an ability check, you can use your reaction to add
+    your Intelligence modifier to the result of its roll.
+          Living Quill          Living Quill
+             Wondrous item, common
+              This fanciful quill looks to be made from the feather
+              of a bird of mysterious origin. As an action, you can
+              speak the Quill's command word and touch the Quill
+              to a piece of paper or parchment. As long as the Quill
+              can hear you, it transcribes your words exactly. The
+              Quill transcribes for 1 hour, but it stops sooner if you
+              speak its command word again.
+              Monocle of the Linguist              Monocle of the Linguist
+                   Wondrous item, uncommon (requires attunement)
+                     This elegantly constructed single eyeglass allows
+                        you to read and understand all writing you view
+                         through it as if it were your native tongue.
+                   Ring of Remembering                   Ring of Remembering
+                        Ring, rare (requires attunement)
+                       This bronze ring is etched with hieroglyphics
+                       from a forgotten civilization. It has 3 Charges,
+                      and it regains 1 expended Charge daily, at dawn.
+                       While you wear this ring, you can expend 1
+                    Charge and focus your thoughts on one object or
+                     creature you can see to instantly learn one piece
+                      of significant, forgotten, or secret knowledge
+                     about it, so long as such information exists.
+            Staff of the Headmaster            Staff of the Headmaster
+              Staff, very rare (requires attunement by a Savant)
+            This staff was once a symbol of the headmaster at an
+           imperial academy. The staff can be wielded as a magic
+      quarterstaff that grants a +2 bonus to attack and damage
+   rolls made with it. When holding it, you have a +2 bonus to
+any ability checks that use your Intelligence or Wisdom.
+Moreover, you can use an action to plunge this staff into the
+ground, producing the effect of private sanctum within a 30-
+foot radius of that point. The area within the spell appears as
+an ornate study in addition to the normal effects of the spell.
+Once you use the staff to cast private sanctum in this way,
+the staff cannot do so again until the following dawn.
+Tome of Everlasting GeniusTome of Everlasting Genius
+Wondrous item, very rare (requires attunement by a Savant)
+This elegantly made ageless tome has been passed down by
+generations of geniuses, each adding more information to its
+pages. This tome contains 1d4 +1 entries from those listed
+below. You can roll randomly, or the DM can choose them.
+For each entry in the tome, you gain proficiency in the skill
+that corresponds with the genius who wrote the entry, and an
+additional +5 bonus to any checks you make with that skill.
+Genius (Proficiency) Genius (Proficiency)
+Actor (Performance) Psychologist (Insight)
+Astronomer (Nature) Surgeon (Medicine)
+Cultist (Deception) Researcher (Investigation)
+Linguist (Persuasion) Ritualist (Arcana)
+Magistrate (History) Theologian (Religion)
+Once you are attuned to this tome for a year and a day, you
+can add your own entry into the tome detailing your area of
+expertise, choosing one skill that you are proficient in to add.
+
+
+===== PAGE 5 =====
+Additional DisciplinesAdditional Disciplines
+At 3rd level, a Savant gains the Academic Discipline feature.
+The following Academic Disciplines are available to Savants,
+along with those presented with the base Savant Class:  
+Culinarian Philosopher
+Mentor Rune Scribe
+Orator Virtuoso
+CulinarianCulinarian
+The Savants known as Culinarians put their great intellects
+to work in the science of food and drink. Ever the adventurer,
+they leave their kitchens behind, venturing out into the world
+in a lifelong search for new wondrous and exotic ingredients.
+What strange and exciting recipes will you come to discover?
+Student of FlavorStudent of Flavor
+3rd-level Culinarian Discipline feature
+You gain proficiency in Nature and cook's utensils. Whenever
+you make a check with either of these proficiencies you gain
+a bonus to your roll equal to one roll of your Intellect Die. If
+you are already proficient in Nature you gain proficiency in
+another skill from the Savant skill list in its place.
+In addition, so long as you have access to cook’s utensils
+and edible ingredients, any creature that expends a Hit Die
+to regain hit points during a short rest with you also regains
+additional hit points equal to one roll of your Intellect Die.
+Culinarian's Cook BookCulinarian's Cook Book
+3rd-level Culinarian Discipline feature
+You are compiling a Cook Book which contains the
+exotic Recipes you discover during your adventures:
+Recipes Known. You know two Recipes of your
+choice from the list at the end of this Discipline.
+Adding a Recipe. As an action, you can harvest
+a Sample from a creature that died within the last
+minute. Before the end of your next long rest, you
+can spend 1 hour, which can be during a short or
+long rest, using cook's utensils and the Sample to
+add the corresponding Recipe that corresponds
+to the Sample's creature type to your Cook Book.
+Preparing a Morsel. At the end of each short or
+long rest, you prepare a number of Morsels equal to
+your Intelligence modifier. Each Morsel you prepare has
+the properties of one Recipe from your Cook Book.
+You don't need samples from a creature corresponding to
+a Recipe to prepare a Morsel with that Recipe. Any Morsels
+you prepare lose their potency at the end of the next short
+or long rest as they become inedible and bland.
+Serving Morsels. As an action, any creature can eat a
+Morsel, or feed it to a willing creature within its reach. A
+creature that eats a Morsel gains the benefits detailed in
+the Recipe description. A creature can only benefit from
+one Morsel at a time, and eating another Morsel instantly
+ends any previous Morsel benefits.
+Replacing a Cook Book. If your Cook Book is lost or
+destroyed, you can spend 1 hour adding each of your old
+Recipes to a new Cook Book from memory. You do not
+need to rediscover any Recipes that were lost.
+Cut AboveCut Above
+6th-level Culinarian Discipline feature
+As an action, you can touch one of your Morsels with cook's
+utensils and change it to a Morsel of another Recipe.
+Also, when you use your action to eat or feed a Morsel to a
+creature, you can make one weapon attack as a bonus action.
+Improved RecipesImproved Recipes
+10th-level Culinarian Discipline feature
+Your Recipes invigorate your allies along with their normal
+benefits. A creature that eats one of your Morsels also gains
+temporary hit points equal to your Savant level.
+Master CulinarianMaster Culinarian
+15th-level Culinarian Discipline feature
+You are a master monster chef and can cook with anything,
+anywhere. Over the course of 1 hour, which can be during a
+short or long rest, you can use cook's utensils and any foods
+to prepare a monstrous feast that can feed yourself and a
+number of other creatures equal to your Savant level.
+                            If a creature spends 10 minutes eating its
+                                  meal, it is instantly cured of any poisons,
+                                     diseases, or any other hostile condition
+                                       that is effecting it, and for 24 hours, it
+                                        is immune to both the frightened and
+                                        poisoned conditions, and it adds one
+                                       roll of your Intellect Die to any ability
+                                       check or saving throw it makes that
+                                         uses its Wisdom or Constitution.
+
+
+===== PAGE 6 =====
+Culinarian Creature RecipesCulinarian Creature Recipes
+The following Recipes are available for Culinarian Savants to
+learn. To learn a Recipe, you must use a sample that matches
+the creature type listed. If a Recipe has a prerequisite Savant
+level, you can learn as soon as you meet the level prerequisite.
+Invigorating MorselInvigorating Morsel
+Sample: any Beast without a flying or swimming speed
+The creature that eats this Morsel regains hit points equal
+to one roll of your Intellect Die + your Intelligence modifier.
+Limbering MorselLimbering Morsel
+Sample: any Beast with a flying speed
+For 1 hour, the creature gains a bonus to its initiative rolls
+equal to your Intelligence modifier (minimum of +1), and its
+walking speed increases by 10 feet.
+Monstrous MorselMonstrous Morsel
+Sample: any Monstrosity of CR 1 or higher
+For 1 hour, the creature gains the "Change Appearance"
+or "Natural Weapons" benefit from the alter self spell.
+Subterranean MorselSubterranean Morsel
+Sample: any Beast with a burrowing speed
+For 1 hour, the creature gains darkvision out to 60 feet. If a
+creature already has darkvision, its radius grows by 30 feet.
+Thalassic MorselThalassic Morsel
+Sample: any Beast with a swimming speed
+For 1 hour, the creature gains a swimming speed equal to its
+walking speed, and it can hold its breath for up to 10 minutes.
+Verdant MorselVerdant Morsel
+Sample: any Plant of CR 1 or higher
+The creature is instantly cured of the following conditions:
+blinded, deafened, paralyzed, petrified, poisoned, a reduction
+to an ability score, or a reduction to its hit point maximum.
+Draconic MorselDraconic Morsel
+Prerequisite: 6th-level Savant
+Sample: any Dragon of CR 1 or higher
+For 1 hour, the creature gains resistance to the damage type
+dealt by the Sample dragon's breath weapon attack.
+You can create a unique Recipe in your Cook Book for each
+different type of Dragon you have harvested a Sample from.
+Psionic MorselPsionic Morsel
+Prerequisite: 6th-level Savant
+Sample: any Aberration of CR 1 or higher
+For 1 hour, the creature can communicate telepathically with
+any creature within 30 feet. However, in order to respond to
+you, a creature must be able to speak at least one language.
+Titanic MorselTitanic Morsel
+Prerequisite: 6th-level Savant
+Sample: any Giant of CR 1 or higher
+For 1 hour, the creature grows in size to become the size of
+the Sample giant. While it is enlarged, it must concentrate on
+this effect as if it were concentrating on a spell. Moreover, the
+creature gains a bonus to its ability checks and saving throws
+that use its Strength equal to your Intelligence modifier.
+You can create a unique Recipe in your Cook Book for each
+different Giant you have harvested a Sample from.
+Viscous MorselViscous Morsel
+Prerequisite: 6th-level Savant
+Sample: any Ooze of CR 1 or higher
+For 1 hour, when the creature takes acid, lightning, poison,
+or slashing damage, it can reduce the damage by an amount
+equal to your Intelligence modifier (minimum of 1 damage).
+Aerial MorselAerial Morsel
+Prerequisite: 10th-level Savant
+Sample: any Air Elemental of CR 1 or higher
+For 1 hour, the creature can take the Dash action as a bonus
+action on each turn, and it can hold its breath indefinitely.
+Aqueous MorselAqueous Morsel
+Prerequisite: 10th-level Savant
+Sample: any Water Elemental of CR 1 or higher
+For 1 hour, the creature can breathe both air and water, gains
+a swimming speed equal to its walking speed, and can use its
+reaction to turn a critical hit into a normal hit.
+Ignan MorselIgnan Morsel
+Prerequisite: 10th-level Savant
+Sample: any Fire Elemental of CR 1 or higher
+For 1 hour, the creature gains resistance to fire damage, and
+it gains immunity to the charmed and frightened conditions.
+Terran MorselTerran Morsel
+Prerequisite: 10th-level Savant
+Sample: any Earth Elemental of CR 1 or higher
+For 1 hour, the creature gains tremorsense out to a 15-foot
+radius, and it gains resistance to nonmagical bludgeoning,
+piercing, and slashing damage.
+Celestial MorselCelestial Morsel
+Prerequisite: 15th-level Savant
+Sample: any Celestial of CR 1 or higher
+For 1 hour, the creature manifests a pair of ethereal angelic
+wings which grant it a flying speed equal to its walking speed.
+Infernal MorselInfernal Morsel
+Prerequisite: 15th-level Savant
+Sample: any Fiend of CR 1 or higher
+For 1 hour, the creature has advantage on any saving throw
+it is forced to make to resist a spell and other magical effect.
+Sylvan MorselSylvan Morsel
+Prerequisite: 15th-level Savant
+Sample: any Fey of CR 1 or higher
+For 1 hour, the creature can use a bonus action on each turn
+to teleport up to 30 feet to an unoccupied space it can see.
+Creating your own Recipes
+Part of the genius of a Culinarian is the creation ofcustom signature Recipes. If you have an idea for aRecipe based on a creature type that isn't includedhere, work with your DM to design a suitable effectbased on the abilities of a creature of that type.Whatever Recipe you design, its effects shouldlast for 1 hour and should be equal in power to theother available Recipes that a Culinarian can add totheir Cook Book at that prerequisite level.
+
+
+===== PAGE 7 =====
+MentorMentor
+While most Savants use their vast intellect in pursuit of their
+chosen discipline, those known as Mentors use their intellect
+in the service of others. Most often, Mentors are past their
+prime and are looking to pass their knowledge on to the next
+generation. Whether you are an elder in your community, a
+retired adventurer, or just someone with knowledge beyond
+your years, you are ready to gently guide those around you.
+Student of LifeStudent of Life
+3rd-level Mentor Discipline feature
+You gain proficiency in both History and Insight. Whenever
+you make a check with either of these proficiencies you gain
+a bonus to your roll equal to one roll of your Intellect Die. If
+you are already proficient in either skill you gain proficiency
+in another skill from the Savant skill list in its place.
+Your knowledge of life also grants you the benefits below:
+You master the Instruction Scholarly Pursuit. If you have
+already mastered this Scholarly Pursuit, you can instead
+master your choice of Perfect Recall or Quick Study.
+Whenever you use Instruction you can teach the chosen
+language, skill, tool, or weapon to a number of creatures
+equal to your Intelligence modifier, instead of just one.
+When you use Potent Observation or Wondrous Insight
+and you roll a 1, you can re-roll your Intellect Die. You
+must use this new roll, even if you roll another 1.
+Astute AdviceAstute Advice
+3rd-level Mentor Discipline feature
+You know just what to say to help your allies learn from their
+failures. Whenever another creature that can hear you within
+30 feet misses with an attack roll, or fails an ability check or
+saving throw, you can use a reaction to have it re-roll the d20,
+adding one roll of your Intellect Die to the result.
+You can use this reaction a number of times equal to your
+Intelligence modifier (a minimum of once), and you regain all
+    expended uses when you finish a long rest.
+Adept AssistanceAdept Assistance
+6th-level Mentor Discipline feature
+You can target two creatures, instead of just one, whenever
+you use an action on your turn to take the Help action.
+Soothing PresenceSoothing Presence
+6th-level Mentor Discipline feature
+Your calming presence allows others to truly relax. Creatures
+that complete a short rest with you have advantage on any Hit
+Die rolls they make to regain their hit points. They also gain a
+number of temporary hit points equal to your Savant level.
+Mystical IntuitionMystical Intuition
+10th-level Mentor Discipline feature
+Your life experience and extraordinary intuition can give you
+mystical insights into the world around you. You can spend 1
+minute meditating on a question you have, or a question that
+another creature has asked you. At the end of the meditation,
+you mystically intuit the answer to the question as if you had
+cast the commune spell. However, unlike commune, you can
+only intuit an answer if it is known to another mortal being.
+Once you gain an answer to a question using this feature,
+you must finish a long rest before you can do so again.
+Finally, you regain all expended uses of your Astute Advice
+feature whenever you complete a short or long rest.
+Master MentorMaster Mentor
+15th-level Mentor Discipline feature
+Your advice is legendary and is desired throughout the land.
+Creatures of your choice within 15 feet of you gain a bonus to
+all ability checks and saving throws equal to your Intelligence
+modifier (minimum of +1), so long as they can hear you.
+Moreover, whenever you target an allied creature with the
+Help action or Astute Advice, you can grant it temporary hit
+points equal to your Intelligence modifier (minimum of 1).
+Lastly, you regain the use of your Mystical Intuition feature
+whenever you complete a short or long rest.
+
+
+===== PAGE 8 =====
+OratorOrator
+Orators are true masters of linguistics and the
+spoken word. These wordsmiths use nothing but
+their wit and mastery of rhetoric to rebuff foes and
+empower their allies. With utmost confidence, they
+stride boldly into hostile situations, confident that
+they can win anyone with their eloquence.
+Unlike those who use their charm to cajole, Orators
+embolden their allies and win over their enemies with
+nothing but reasonable logic and convincing rhetoric.
+Student of LogicStudent of Logic
+3rd-level Orator Discipline feature
+You gain proficiency in both Deception and Persuasion, and
+whenever you make a check with either proficiency you gain
+a bonus to your roll equal to one roll of your Intellect Die. If
+you are already proficient in either skill you gain proficiency
+in another skill from the Savant skill list in its place.
+Your mastery over words grants you the benefits below:
+Whenever you make a Deception or Persuasion check
+you can use your Intelligence in place of Charisma.
+You master your choice of the Instruction, Riddles,
+or Traditions Scholarly Pursuit, even if you do not
+meet the normal level prerequisite for that Pursuit.
+You learn to speak, read, and write a number of extra
+languages equal to your Intelligence modifier.
+Rhetorical SuperiorityRhetorical Superiority
+3rd-level Orator Discipline feature
+Your mastery of various languages allows you to inspire,
+dominate, and charm with words. You gain the rhetorical
+abilities below, which use your Intellect save DC and can
+affect any creature that can both hear and understand you.
+Convincing Conversation
+If you spend at least 1 minute talking with a creature that is
+not hostile toward you, you can force it to unknowingly make
+a Wisdom saving throw. On a failed save, it is charmed by you
+for 1 hour, or until you or your allies do anything harmful to
+the charmed creature or any of its allies.
+You can have only one creature charmed this way at a time.
+Charming another target ends this effect for other creatures.
+Cutting Retort
+When a creature you can see within 30 feet makes an attack,
+you can use your reaction to distract it with a cutting remark.
+It must succeed on a Wisdom saving throw or subtract one
+roll of your Intellect Die from the triggering attack roll.
+Once a creature succeeds on this Wisdom saving throw,
+it is immune to the effects of this ability it for 24 hours.
+Invigorating Word
+When a creature you can see within 30 feet takes damage
+from a hostile creature, you can use your reaction to grant it
+temporary hit points equal to one roll of your Intellect Die.
+A creature must have at least 1 hit point remaining after
+taking damage in order to benefit from this ability.
+Uplifting Remark
+When another creature you can see within 30 feet makes an
+Intelligence, Wisdom, or Charisma saving throw, you can use
+    a reaction to add one roll of your Intellect Die to its roll.
+Iron LogicIron Logic
+6th-level Orator Discipline feature
+Your masterful grasp of logic allows you to resist all but the
+strongest mind-altering effects. You have advantage on any
+saving throw you are forced to make to resist enchantment
+spells, and you are immune to the charmed condition.
+Also, whenever you use Uplifting Remark, the creature
+can roll the Intellect Die twice and use the higher result.
+Peerless RhetoricPeerless Rhetoric
+10th-level Orator Discipline feature
+You can bend the masses to your will with your words. If you
+speak to a group of creatures who can hear and understand
+you for 1 minute, you can choose to inspire or persuade a
+number of creatures in that crowd equal to your Savant level,
+as detailed below. Once you do so, you must finish a short or
+long rest before you can use this ability on a crowd again.
+Inspire. Creatures gain a number of temporary hit points
+equal to your Savant level, and while the temporary hit points
+remain, creatures have advantage on saving throws to resist
+enchantment spells and are immune to being frightened.
+Persuade. Creatures must succeed on a Wisdom saving
+throw against your Intellect save DC or be charmed by you
+for up to 24 hours as if by the mass suggestion spell.
+
+
+===== PAGE 9 =====
+Master OratorMaster Orator
+15th-level Orator Discipline feature
+Your absolute mastery over the spoken word allows you to
+bend all but the strongest creatures to your will. When you
+force a creature to make a saving throw to resist one of your
+Rhetorical Superiority abilities or Peerless Rhetoric, it has
+disadvantage on the roll if both its Intelligence and Wisdom
+scores are lower than your Intelligence score.
+PhilosopherPhilosopher
+Philosophy is considered by many to be the purest Discipline
+a Savant can pursue. They expend their genius pondering the
+deep questions of existence; the purpose of life, the nature of
+the multiverse, and the relationships between mortal beings
+and gods. Through the study of the multiverse, Philosophers
+try to perfect mortal knowledge of the true nature of reality.
+Student of ThoughtStudent of Thought
+3rd-level Philosopher Discipline feature
+You gain proficiency in both Arcana and Religion. Whenever
+you make a check with either of these proficiencies you gain
+a bonus to your roll equal to one roll of your Intellect Die. If
+you are already proficient in either skill you gain proficiency
+in another skill from the Savant skill list in its place.
+Your grasp of reality also grants you the following benefits:
+Whenever you make an ability check to communicate with
+a creature that is not native to the material plane you gain
+a bonus to your roll equal to one roll of your Intellect Die.
+You can also learn the following characteristics about your
+Focus with Adroit Analysis: its alignment, its native plane
+of existence, or its spellcasting ability (if it has one) and
+the level of the highest spell that it can cast.
+You learn to speak, read, and write either
+                                   Celestial, Infernal,
+                                       Primordial, or
+                                               Sylvan.
+Words of PowerWords of Power
+3rd-level Philosopher Discipline feature
+In your study, you have learned to speak the Words of Power
+below that were used in shaping the multiverse. If your Focus
+is within 30 feet and it can hear you, you can speak one Word
+of Power at it, forcing it to make a saving throw against your
+Intellect save DC, or suffer the Word of Power's effects.
+Power Word: Confound
+Whenever your Focus makes an ability check or attack roll,
+you can use your reaction to force it to make an Intelligence
+saving throw. On a failure, it takes psychic damage equal to
+one roll of your Intellect Die and it suffers disadvantage on
+the triggering ability check or attack roll.
+Power Word: Disorient
+As an action, you force your Focus to make a Wisdom saving
+throw. On a failure, it takes psychic damage equal to one roll
+of your Intellect Die, and has disadvantage on the first saving
+throw it makes before the beginning of your next turn.
+Power Word: Dread
+As an action, you force your Focus to make a Wisdom saving
+throw. On a failure, it takes psychic damage equal to one roll
+of your Intellect Die and it is frightened of another creature it
+can see (your choice) until the beginning of your next turn.
+Power Word: Halt
+When your Focus attempts to move, you can use a reaction to
+force it to make a Strength saving throw. On a failure, it takes
+psychic damage equal to one roll of your Intellect Die and its
+speed is reduced to zero until the beginning of your next turn.
+Unwavering FocusUnwavering Focus
+6th-level Philosopher Discipline feature
+Your resolute sense of purpose bolsters your Words of Power.
+You can speak your Words of Power at any creature that can
+hear you within 30 feet, instead of just your current Focus.
+Moreover, if you speak a Word of Power at your Focus, it
+takes additional psychic damage equal to one roll of your
+   Intellect Die on a failed save, and half as much psychic
+                                            damage on a successful save.
+
+
+===== PAGE 10 =====
+Supreme UnderstandingSupreme Understanding
+10th-level Philosopher Discipline feature
+Your ever-deepening understanding of the nature of reality
+grants you knowledge of more potent Words of Power. You
+learn the Words of Power listed below, and you can speak
+each of them once between each short or long rest.
+Power Word: Enfeeble
+As an action, you force your Focus to make an Intelligence
+saving throw. On a failed save, it is stunned for 1 minute.
+It can choose to repeat this saving throw at the end of each
+of its turns. On a success, this effect ends, but, on a failure, it
+takes psychic damage equal to two rolls of your Intellect Die.
+Power Word: Shunt
+As an action, you can force your Focus to make a Charisma
+saving throw. On a failed save, it is shunted from the current
+plane for up to 1 minute. If it is native to the current plane, it
+is banished to a harmless demiplane. If it is not native to the
+current plane, it is banished to its native plane of existence.
+It can choose to repeat this saving throw at the end of each
+of its turns. On a success, it returns to the space that it was
+shunted from, or the closest unoccupied space. On a failure,
+it takes psychic damage equal to two
+rolls of your Intellect Die.
+Master PhilosopherMaster Philosopher
+15th-level Philosopher Discipline feature
+Your willpower rivals that of powerful extraplanar beings. You
+are always under the effect of protection from evil and good.
+Also, whenever a creature takes psychic damage from one
+of your Words of Power, it takes additional psychic damage
+equal to your Intelligence modifier (minimum of +1).
+Rune ScribeRune Scribe
+Legends say that rune magic is the most ancient arcane art to
+have been mastered by mortals. Savants that dedicate their
+lives to the study of these Runes are known as Rune Scribes.
+They learn all they can about these ancient sigils that embody
+the magic of creation. The magic of runes isn't widely known,
+and its secrets are jealously guarded by those who master it.
+Student of Rune MagicStudent of Rune Magic
+3rd-level Rune Scribe Discipline feature
+You gain proficiency with Arcana and calligrapher's supplies.
+Whenever you make a check with either proficiency you gain
+a bonus to the roll equal to one roll of your Intellect Die. If
+you are already proficient in Arcana you gain proficiency in
+another skill from the Savant skill list in its place.
+You also learn to speak, read, and write two of the following
+Runic Languages, which are used to inscribe the Runes you
+learn: Draconic, Druidic, Dwarvish, Giant, or Primordial.
+    Rune Carving    Rune Carving
+      3rd-level Rune Scribe Discipline feature
+       You have learned the artful and ancient magic of Runes.
+       Runes Known. You learn two Runes of your choice
+       from the list at the end of this Discipline. Some Runes
+       have a Savant level prerequisite, which you can learn as
+            soon as you reach that Savant level.
+              You learn one additional Rune of your choice at
+                      6th, 10th, 15th, and 18th level in this class.
+                        Whenever you gain a level in this class, you
+                         can replace one of the Runes you know with
+                         another Rune of your choice.
+                         Inscribing a Rune. Over the course of 1
+                         hour, you can use your calligrapher's supplies
+                       to inscribe a Rune you know into a weapon, suit
+                        of armor, or an object that you can wear or hold.
+                           A creature that wears or wields a Runic object
+                               gains the benefits of the inscribed Rune.
+                                 Each of the Runes you know can only be
+                               inscribed in one object. Inscribing a Rune
+                            again dispels any previous inscriptions.
+            Invoking Runes. If the creature bearing one of your
+        Runic objects speaks the language the Rune is inscribed
+          in, it can Invoke the Rune to gain its benefits.
+            Once a Rune has been Invoked, it cannot be Invoked
+    again until the Rune Scribe who inscribed it finishes a long
+       rest, even if the Rune is inscribed onto a different object.
+       Runic Casting. You can cast and concentrate on spells
+         from your Runes, even when you have a Focus. If a Rune
+     requires a target to make a saving throw, it does so against
+    your Intellect save DC. If a Rune requires an attack roll, the
+     the Invoking creature uses its Intelligence as follows:
+      Runic attack modifier = your proficiency bonus
+      + your Intelligence modifier
+
+
+===== PAGE 11 =====
+Elder MagicksElder Magicks
+6th-level Rune Scribe Discipline feature
+The power imbued within your Runes has grown. Your Runic
+objects count as magical for as long as the Rune is inscribed.
+Also, during the course of a short rest, you can perform a
+short 10-minute ritual to reawaken the magic of a Rune that
+has already been Invoked for the day, and it can be Invoked
+one additional time before the end of your next long rest.
+Runic WardRunic Ward
+10th-level Rune Scribe Discipline feature
+Your Runes offer a measure of protection to those that bear
+them. If a creature bearing at least one of your Runic objects
+is forced to make a saving throw to resist the effects of a spell
+or another magical effect, they gain a bonus to their roll equal
+to your Intelligence modifier (medium of +1).
+Moreover, each time you finish a long rest, you can replace
+one Rune you know with another Rune of your choice.
+Master Rune ScribeMaster Rune Scribe
+15th-level Rune Scribe Discipline feature
+You can draw on the magic of your Runes to protect yourself
+in times of great need. When you are reduced to 0 hit points
+but not killed outright, you can draw on the power of a Runic
+object within 60 feet of you, instantly dispelling the Rune and
+any of its effects, and you fall to 1 hit point instead of 0.
+RunesRunes
+Below are the Runes available for a Rune Scribe to learn. If a
+Rune has a level prerequisite, you can learn that Rune at the
+same time you meet its prerequisite. Some Runes can only
+be inscribed in certain objects as detailed in its description.
+Each object can only bear the magic of one Rune at a time.
+Rune of Enchantment
+Item: a bracelet, diadem, necklace, or ring
+Creatures will treat the bearer of this Runic object one stage
+friendlier than normal. For example, an indifferent creature
+might treat the bearer as a friend, or a hostile creature might
+treat the bearer indifferently. This special treatment instantly
+ends if the bearer attacks the creature.
+Invoking this Rune. As an action, the bearer can Invoke
+the Rune to cast either the calm emotions, charm person or
+command spell, targeting a number of creatures equal to the
+Rune Scribe's Intelligence modifier (minimum of 1 creature).
+Rune of Evocation
+Item: a simple or martial melee weapon
+When you inscribe the Rune you imbue it with acid, cold, fire,
+poison, or lighting damage. Whenever the bearer hits with an
+attack with this Runic weapon, it deals additional damage of
+the imbued type equal to one roll of your Intellect Die.
+Invoking this Rune. When the bearer hits with an attack
+with this Runic weapon, it can Invoke the Rune to cause the
+attack to deal additional damage of the imbued damage type
+equal to three rolls of the Rune Scribe's Intellect Die.
+Rune of Illusion
+Item: a cloak, robe, or suit of armor
+As an action, the bearer of this Runic object can change its
+physical appearance to match that of a creature it has seen
+before, so long as it has the same arrangement of limbs as
+the bearer. The bearer can determine the specifics of these
+changes, including race, coloration, hair length, sex, height,
+and weight, but it cannot change its size. This illusion does
+not affect clothing, equipment, or game statistics.
+The illusion can be detected with a successful Intelligence
+(Investigation) check vs. the Rune Scribe's Intellect save DC.
+Invoking this Rune As an action, the bearer of this Runic
+object can Invoke this Rune to turn invisible for 10 minutes.
+This invisibility ends if they attack or force a saving throw.
+Rune of Necromancy
+Item: a belt, ring, or suit of armor
+The bearer of this Runic object can use a bonus action to
+grant itself temporary hit points equal to the Rune Scribe's
+Intelligence modifier (minimum of 1 temporary hit point).
+Invoking this Rune. When the bearer of this Runic object
+is reduced to 0 hit points, but it is not killed outright, it can
+Invoke this Rune to fall to 1 hit point instead of 0.
+Rune of Abjuration
+Prerequisite: 6th level Rune Scribe
+Item: a cloak, robe, shield, or suit of armor
+Once per turn, the bearer of this Runic object can reduce the
+damage from a spell or another magical effect by an amount
+equal the Rune Scribe's Intelligence modifier (minimum of 1).
+Invoking this Rune. When a creature within 30 feet of the
+bearer of this Runic object casts a spell, the bearer can use its
+reaction to Invoke this Rune and force the creature that cast
+the spell to make a Constitution saving throw. On a failure,
+the triggering spell fails and has no effect.
+
+
+===== PAGE 12 =====
+Rune of Conjuration
+Prerequisite: 6th-level Savant
+Item: a belt, cloak, ring, or suit of armor
+As an action, the bearer of this Runic object can expend any
+amount of its remaining movement speed to instantly teleport
+to an unoccupied space it can see within that distance.
+Invoking this Rune. As an action, the bearer can Invoke
+the Rune and force two creatures it can see within 60 feet to
+make a Charisma saving throw, which a creature can choose
+to fail. If both fail, they instantly switch places.
+Rune of Divination
+Prerequisite: 10th-level Savant
+Item: a wand, staff, robe, or spellcasting focus
+The bearer of this Runic object can use it as a spellcasting
+focus to cast the comprehend languages, detect magic and
+identify spells as rituals, without the material components.
+Invoking this Rune. As an action, the bearer can Invoke
+the Rune to empower their vision. For 1 hour, the bearer has
+truesight, sees secret doors and traps hidden by magic, and
+can see into the Ethereal Plane, all out to a range of 120 feet.
+Rune of Transmutation
+Prerequisite: 10th-level Savant
+Item: a bracelet, diadem, ring, or necklace
+The bearer of this Runic object gains its choice of a 30-foot
+swimming speed, a 30-foot climbing speed, or has its walking
+speed increased by 10 feet. As a bonus action, the bearer can
+switch its current benefit for another from the above list.
+Invoking this Rune. As an action, the bearer can Invoke
+this Rune to transform itself into a beast with a CR equal to
+the Rune Scribe's Savant level or lower, but otherwise using
+the rules of the polymorph spell. However, unlike polymorph,
+this transformation does not require concentration.
+VirtuosoVirtuoso
+Bending their impressive intellect toward the study of music,
+Virtuosos are known for the impressively complex music they
+write and perform. These masterful composers know how to
+manipulate the emotions of their listeners with themes, and,
+with the right sequence of notes, they can fill a listener with
+feelings of sorrow, anger, indifference, or absolute adoration.
+Student of MusicStudent of Music
+3rd-level Virtuoso Discipline feature
+You gain proficiency in Insight and Performance. Whenever
+you make a check with either of these proficiencies you gain
+a bonus to your roll equal to one roll of your Intellect Die. If
+you are already proficient in either skill you gain proficiency
+in another skill from the Savant skill list in its place.
+Your intuitive understanding of musical composition and
+performance also grants you the benefits below:
+Whenever you would make a Performance check you can
+choose to use your Intelligence in place of your Charisma.
+You gain proficiency with three musical instruments.
+If you spend 1 hour practicing with a musical instrument,
+you are considered proficient with it. However, only one
+instrument can benefit from this feature at a time.
+Whenever you make an ability check that incorporates a
+musical instrument that you are proficient with, you can
+treat a roll of 9 or lower on the d20 as a 10.
+Wondrous ThemeWondrous Theme
+3rd-level Virtuoso Discipline feature
+You have composed powerful Themes that stir the hearts of
+any creature that can hear them. As an action, you can begin
+to play this Theme, which continues until the start of your
+next turn, unless you choose to end it (no action required).
+If you are already playing your Theme, you can use a bonus
+action to extend its duration until the start of your next turn.
+Your Theme can be heard up to 120 feet away, but it only
+influences creatures within 30 feet that can hear the Theme.
+If one of your Theme's effects requires a creature to make
+a saving throw, it does so against your Intellect save DC.
+While you are performing your Theme, you can use your
+reaction to alter its sound in the following ways:
+Discordant Note
+When a creature under the influence of your Theme attacks
+another creature you can see, you can use your reaction to
+subtract one roll of your Intellect Die from its attack roll.
+Inspiring Tune
+When a creature under the influence of your Theme takes
+damage from a source you can see, you can use a reaction to
+reduce the damage it takes by one roll of your Intellect Die.
+Uplifting Melody
+When a creature under the influence of your Theme makes a
+saving throw to resist being charmed, frightened, or stunned,
+you can use a reaction to have it automatically succeed.
+
+
+===== PAGE 13 =====
+Disarming MelodyDisarming Melody
+6th-level Virtuoso Discipline feature
+You have woven threads of disarming music into your Theme.
+If a creature under the influence of your Theme attacks you,
+it must succeed on a Wisdom saving throw or attack another
+target of its choice within range. If there isn't another target
+in range its attack misses. Any creature that succeeds on this
+saving throw is immune to this effect for 24 hours.
+Additionally, whenever you use your action to begin your
+Theme or your bonus action to continue the Theme, you can
+target one creature under its influence with a burst of sound,
+forcing it to make a Constitution saving throw. On a failure, it
+takes thunder damage equal to two rolls of your Intellect Die.
+Empowered ThemeEmpowered Theme
+10th-level Virtuoso Discipline feature
+The strength and beauty of your Theme has increased, and it
+now affects any creature within 60 feet that can hear it.
+Also, whenever you use a Wondrous Theme reaction, you
+can grant one creature under the influence of your Theme
+temporary hit points equal to your Intelligence modifier.
+Master VirtuosoMaster Virtuoso
+15th-level Virtuoso Discipline feature
+Your musical genius and the complexity of your compositions
+is without peer. You gain the following additional benefits:
+Creatures within range of your Theme are still considered
+to be under its influence, even if they cannot hear it.
+When a creature fails its saving throw against Disarming
+Melody it takes (additional) thunder damage equal to one
+roll of your Intellect Die.
+Scholarly PursuitsScholarly Pursuits
+Listed below are additional Scholarly Pursuits available to
+a Savant that can be included with those in the base class.
+If a Pursuit allows you to add one roll of your Intellect Die
+to an ability check that already has this benefit, you roll your
+Intellect Die twice and use the higher result instead.
+PolymathPolymath
+You have a knack for picking up new skills, though you may
+not be a master of them all. You gain proficiency in one skill
+from the Savant skill list, one tool of your choice, and you
+learn to speak, read, and write one language of your choice.
+BushcraftBushcraft
+Prerequisites: 4th-level Savant
+You can use your knowledge of nature to thrive in the wilds.
+You gain proficiency in Nature, and whenever you make an
+Intelligence (Nature) check, you gain a bonus to your roll
+equal to one roll of your Intellect Die.
+Over the course of 10 minutes, which can be during a short
+or long rest, you can gather natural material and use a dagger
+or handaxe to create one of the following objects: a club, 1d4
+darts, a javelin, a net, 10 feet of rope, or a Bushcraft Snare.
+As an action, you can set a Bushcraft Snare in an adjacent,
+unoccupied, 5-foot space. The first Large or smaller creature
+to move into the space must make a Dexterity saving throw
+against your Intellect save DC or be restrained by the Snare.
+As an action, a creature can make a Strength check against
+your Intellect save DC, escaping from the Snare on a success.
+EquestrianismEquestrianism
+Prerequisites: 4th-level Savant
+You have learned to tend to horses and other trained mounts.
+You gain proficiency in Animal Handling, and whenever you
+make a Wisdom (Animal Handling) check, you gain a bonus
+to your roll equal to one roll of your Intellect Die.
+When you are riding a trained mount, your mount shares
+your initiative in combat and acts during your turn. Whenever
+it makes an ability check, damage roll, or saving throw, it can
+add one roll of your Intellect Die to its roll, and you can use a
+bonus action on each of your turns to command your mount
+to attack, or to use another action from its stat block.
+Finally, if you spend 8 hours training a friendly quadruped
+creature and spend 50 gold on necessary training materials
+and food, it is considered to be a trained mount for you.
+First AidFirst Aid
+Prerequisites: 4th-level Savant
+You have learned basic medicinal techniques to aid your
+allies. You gain proficiency in Medicine, and whenever you
+make a Wisdom (Medicine) check, you gain a bonus to your
+roll equal to one roll of your Intellect Die.
+During a long rest, you can spend 1-hour using a Healer's
+Kit to produce a number of potions of healing equal to your
+Intelligence modifier (minimum of 1). Any unused potions of
+healing expire 24 hours after you created them.
+MarksmanshipMarksmanship
+Prerequisites: 4th-level Savant
+You bring your intellect to bear in the use of ranged weapons.
+You gain proficiency in Sleight of Hand. Whenever you make
+a Dexterity (Sleight of Hand) check, you gain a bonus to your
+roll equal to one roll of your Intellect Die.
+You also gain proficiency with all martial ranged weapons,
+and whenever you make a ranged weapon attack, you can use
+your Intellect Die in place of the weapon's damage die.
+Finally, if your setting includes firearms, and your Savant
+has been exposed to the inner workings of such devices, they
+are considered proficient with simple and martial firearms.
+MercantilismMercantilism
+Prerequisites: 4th-level Savant
+You are an astute scholar of economics, trade routes, and the
+marketplace. You gain proficiency in Insight, and whenever
+you make a Wisdom (Insight) check, you gain a bonus to your
+roll equal to one roll of your Intellect Die.
+While you are trading with a creature whose Intelligence
+and Wisdom are both lower than your Intelligence, items you
+purchase from that creature cost 10 percent less, and items
+you sell are purchased for 10 percent more than usual.
+MusicianshipMusicianship
+Prerequisites: 4th-level Savant
+You have talent for music and song. You gain proficiency in
+Performance and with one musical instrument. Whenever
+you make an ability check with either, you gain a bonus to
+your roll equal to one roll of your Intellect Die.
+Also, when you play a musical instrument or perform for
+a creature for 1 minute or longer, you have advantage on any
+ability checks you make to interact socially with that creature
+for 1 hour. This benefit instantly ends if you or your allies do
+anything harmful to the creature or to its allies.
+
+
+===== PAGE 14 =====
+The SavantThe SavantThe SavantThe SavantThe SavantExpandedExpandedExpandedExpandedExpanded
+A multitude of additional options for the Savant!
+Includes Roleplaying Quirks, five Feats, seven
+Magic Items, and six Academic Disciplines:
+Culinarian - Mentor - Orator - Philosopher
+Rune Scribe - Virtuoso
+Version 5.2 - Created by /u/laserllama
+Artist Credits:
+Covers - Lie Setiawan - Founder of Lat-Nam
+Page 1 - Titus Lunter - Silverquill Campus
+Page 2 - Justine Cruz - Kalain, Reclusive Painter
+Page 3 - Gabi Vitoria - Artifact Collector
+Page 4 - Alix Branwyn - Cabaretti Caterer
+Page 6 - Wei Guan - Mentor of the Meek
+Page 7 - Lake Hurwitz - Garrulous Sycophant
+Page 8 - Eric Deschamps - Esteemed Speaker
+Page 9 - Svetlin Velinov - Story Seeker
+Page 10 - Svetlin Velinov - Graven Lore
+Page 11 - Paul Canavan - Harmonic Prodigy
+The original Savant Class can be found Here
+Additional laserllama Homebrew content
+can be found for free on GM Binder.
+Support me on Patreon to unlock exclusive
+Academic Disciplines for the Savant:
+Engineer - Occultist - Tinker - Voyager
+
+
+===== PAGE 15 =====
+ 
+This document was lovingly created
+using GM Binder.
+If you would like to support the GM Binder developers,
+consider joining our Patreon community.WWW.GMBINDER.COM
