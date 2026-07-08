@@ -22,12 +22,19 @@ interface StoreValue extends AppState {
 
 const StoreContext = createContext<StoreValue | null>(null)
 
+/** Fill in fields added after a character was first saved. */
+function migrate(c: Character): Character {
+  return { ...c, resourceUses: c.resourceUses ?? {}, heroicInspiration: c.heroicInspiration ?? false }
+}
+
 function load(): AppState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as AppState
-      if (Array.isArray(parsed.characters)) return parsed
+      if (Array.isArray(parsed.characters)) {
+        return { ...parsed, characters: parsed.characters.map(migrate) }
+      }
     }
   } catch {
     // corrupted storage — start fresh rather than crash
@@ -68,8 +75,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           activeId: s.activeId === id ? null : s.activeId,
         })),
       setActive: (id) => setState((s) => ({ ...s, activeId: id })),
-      importCharacter: (c) =>
+      importCharacter: (raw) =>
         setState((s) => {
+          const c = migrate(raw)
           const exists = s.characters.some((x) => x.id === c.id)
           const imported = exists ? { ...c, id: newId(), name: `${c.name} (imported)` } : c
           return { characters: [...s.characters, imported], activeId: imported.id }

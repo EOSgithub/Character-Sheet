@@ -108,6 +108,8 @@ export default function Wizard() {
       shield: false,
       focus: { active: false, name: '', clues: [], notes: '' },
       reactionsUsed: 0,
+      resourceUses: {},
+      heroicInspiration: false,
       inventory: startingItems,
       attacks: [],
       coins: { cp: 0, sp: 0, gp: 0, pp: 0 },

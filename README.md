@@ -9,11 +9,13 @@ to GitHub Pages.
 - **Home** — character roster, active character overview, level-up entry, JSON export/import, notes
 - **Abilities, Saves & Skills** — derived scores, saving throws, skill ledger
 - **Battle Mode** — HP/temp HP, hit dice, death saves, AC & armor, reactions (Swift Reflexes),
-  conditions, attacks, and the **Adroit Analysis Focus tracker**
+  conditions, attacks with the 2024 weapon table and **Weapon Masteries**, automated
+  **short/long rests** with per-rest feature-use tracking, Heroic Inspiration, and the
+  **Adroit Analysis Focus tracker**
 - **Features & Traits** — class features by level, discipline features, pursuits, feats, species & background traits
 - **Inventory & Attuned Items** — gear, attunement slots, coin
 - **Compendium** — the full Savant source text: class, 11 Academic Disciplines, Scholarly Pursuits,
-  Scholarly Feats, magic items, personality tables
+  Scholarly Feats, magic items, personality tables, plus the 2024 weapons & masteries reference
 
 ## Development
 

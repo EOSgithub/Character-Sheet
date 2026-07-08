@@ -3,6 +3,7 @@ import {
   SAVANT_TABLE, SAVANT_BASICS, SAVANT_FEATURES, DISCIPLINES, PURSUITS,
   SCHOLARLY_FEATS, SAVANT_MAGIC_ITEMS, SAVANT_QUIRKS,
 } from '../data/savant'
+import { WEAPONS, MASTERIES } from '../data/weapons'
 import { PageHead } from './shared'
 
 type Entry = { key: string; label: string; group: string }
@@ -15,6 +16,7 @@ const ENTRIES: Entry[] = [
   { key: 'feats', label: 'Scholarly Feats', group: 'Options' },
   { key: 'items', label: 'Magic Items', group: 'Options' },
   { key: 'quirks', label: 'Personality & Quirks', group: 'Options' },
+  { key: 'weapons', label: 'Weapons & Masteries', group: 'Rules 2024' },
 ]
 
 function FeatureBlock({ name, meta, text }: { name: string; meta?: string; text: string }) {
@@ -134,6 +136,39 @@ export default function Compendium() {
         <h2>Magic Items</h2>
         <p className="muted">Scholarly magic items from Savant: Expanded.</p>
         {SAVANT_MAGIC_ITEMS.map((i) => <FeatureBlock key={i.name} name={i.name} meta={i.meta} text={i.text} />)}
+      </div>
+    )
+  } else if (current === 'weapons') {
+    content = (
+      <div className="card prose" style={{ maxWidth: 'none' }}>
+        <h2>Weapons & Masteries (D&D 2024)</h2>
+        <p className="muted">
+          The 2024 weapon table, including each weapon's Mastery property. Using a Mastery property normally
+          requires a class feature that unlocks it — the Savant as written predates Weapon Mastery, so check
+          with your DM. The Savant is proficient with simple weapons, rapiers, shortswords, and whips;
+          Tacticians add martial weapons without the Heavy property.
+        </p>
+        <h3>Mastery properties</h3>
+        {Object.values(MASTERIES).map((m) => <FeatureBlock key={m.name} name={m.name} text={m.text} />)}
+        <h3>Weapon table</h3>
+        <div style={{ overflowX: 'auto' }}>
+          <table className="ledger">
+            <thead>
+              <tr><th>Weapon</th><th>Category</th><th>Damage</th><th>Mastery</th><th>Properties</th></tr>
+            </thead>
+            <tbody>
+              {WEAPONS.map((w) => (
+                <tr key={w.key}>
+                  <td style={{ fontWeight: 600 }}>{w.name}</td>
+                  <td className="small muted">{w.category}</td>
+                  <td className="num">{w.damage} {w.damageType.slice(0, 1).toUpperCase()}</td>
+                  <td>{MASTERIES[w.mastery].name}</td>
+                  <td className="small muted">{w.properties.join(', ') || '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     )
   } else if (current === 'quirks') {

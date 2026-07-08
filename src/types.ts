@@ -84,6 +84,8 @@ export interface Attack {
   damageType: string
   range?: string
   notes?: string
+  /** links the attack to a 2024 weapon (mastery, properties) */
+  weaponKey?: string
 }
 
 export type ConditionKey =
@@ -165,6 +167,9 @@ export interface Character {
   shield: boolean
   focus: FocusState
   reactionsUsed: number
+  /** expended uses per resource key (see rules/resources.ts) */
+  resourceUses: Record<string, number>
+  heroicInspiration: boolean
   inventory: InventoryItem[]
   attacks: Attack[]
   coins: { cp: number; sp: number; gp: number; pp: number }

@@ -4,6 +4,8 @@ import { derive, fmt } from '../rules/derive'
 import { ARMORS, CONDITIONS, FOCUS_CLUES } from '../types'
 import type { Attack } from '../types'
 import { newId } from '../state/store'
+import { deriveResources, applyShortRest, applyLongRest } from '../rules/resources'
+import { WEAPONS, MASTERIES, getWeapon, savantProficientWith, defaultAbility } from '../data/weapons'
 import { NoCharacter, PageHead, Stepper } from './shared'
 
 export default function Battle() {
@@ -122,6 +124,15 @@ export default function Battle() {
             </label>
           </div>
           <p className="small muted mt">Predictive Defense: AC uses the better of DEX or INT in light/medium armor or unarmored.</p>
+          <div className="row mt">
+            <button
+              className={`chip${c.heroicInspiration ? ' on' : ''}`}
+              style={{ minHeight: 40 }}
+              onClick={() => updateCharacter(c.id, { heroicInspiration: !c.heroicInspiration })}
+            >
+              {c.heroicInspiration ? '★' : '☆'} Heroic Inspiration
+            </button>
+          </div>
           {d.reactions > 1 && (
             <>
               <hr className="rule" />
@@ -144,6 +155,12 @@ export default function Battle() {
             </>
           )}
         </div>
+      </div>
+
+      {/* --------------------------- rests & uses --------------------------- */}
+      <div className="grid cols-2 mt">
+        <RestCard />
+        <ResourcesCard />
       </div>
 
       {/* ------------------------------ Focus ------------------------------ */}
@@ -180,6 +197,136 @@ export default function Battle() {
         </div>
       </div>
     </>
+  )
+}
+
+/** Short and long rests, automated per the 2024 rules. */
+function RestCard() {
+  const { active, updateCharacter } = useStore()
+  const [dieRoll, setDieRoll] = useState('')
+  if (!active) return null
+  const c = active
+  const d = derive(c)
+  const defs = deriveResources(c, d)
+  const diceLeft = d.hitDiceTotal - c.hitDiceSpent
+
+  function spendDie(roll: number) {
+    if (diceLeft <= 0) return
+    const healed = Math.max(1, roll + d.mods.con)
+    updateCharacter(c.id, {
+      hitDiceSpent: c.hitDiceSpent + 1,
+      currentHP: Math.min(d.maxHP, c.currentHP + healed),
+    })
+    setDieRoll('')
+  }
+
+  function finishShortRest() {
+    updateCharacter(c.id, applyShortRest(c, defs))
+  }
+
+  function longRest() {
+    if (confirm('Finish a long rest? HP and Hit Dice are fully restored, temp HP is lost, exhaustion drops by 1, and all per-rest uses reset.')) {
+      updateCharacter(c.id, applyLongRest(c, d))
+    }
+  }
+
+  const shortRestHints: string[] = []
+  if (d.disciplineKey === 'culinarian' && c.level >= 3) shortRestHints.push('Student of Flavor: each spent Hit Die also heals +1 Intellect Die roll (add it to the roll you enter).')
+  if (d.disciplineKey === 'mentor' && c.level >= 6) shortRestHints.push('Soothing Presence: advantage on Hit Die rolls; allies gain temp HP equal to your Savant level.')
+
+  return (
+    <div className="card">
+      <h2>Rest</h2>
+      <div className="eyebrow">Short rest · spend Hit Dice</div>
+      <div className="row mt" style={{ marginTop: 8 }}>
+        <span className="small muted num">d8 × {diceLeft} left</span>
+        <input
+          inputMode="numeric"
+          placeholder="d8 roll"
+          value={dieRoll}
+          onChange={(e) => setDieRoll(e.target.value.replace(/\D/g, ''))}
+          style={{ width: 90, minHeight: 44, border: '1px solid var(--rule-strong)', borderRadius: 6, padding: '4px 12px', background: '#fff' }}
+        />
+        <button
+          className="btn small"
+          disabled={diceLeft <= 0 || !(parseInt(dieRoll, 10) >= 1 && parseInt(dieRoll, 10) <= 8)}
+          onClick={() => spendDie(parseInt(dieRoll, 10))}
+        >
+          Spend & heal
+        </button>
+        <button className="btn small" disabled={diceLeft <= 0} onClick={() => spendDie(5)}>
+          Average (5)
+        </button>
+      </div>
+      <p className="small muted" style={{ marginBottom: 0 }}>Each die heals its roll {fmt(d.mods.con)} (CON).</p>
+      {shortRestHints.map((h) => <p key={h} className="small muted" style={{ marginBottom: 0 }}>{h}</p>)}
+      <hr className="rule" />
+      <div className="row">
+        <button className="btn" onClick={finishShortRest}>Finish short rest</button>
+        <button className="btn primary" onClick={longRest}>Long rest</button>
+      </div>
+      <p className="small muted" style={{ marginBottom: 0 }}>
+        Short rest restores short-rest uses. Long rest restores all HP, Hit Dice, and uses; temp HP is lost; exhaustion −1.
+      </p>
+    </div>
+  )
+}
+
+/** Per-rest feature uses, derived from class, discipline, species, and feats. */
+function ResourcesCard() {
+  const { active, updateCharacter } = useStore()
+  if (!active) return null
+  const c = active
+  const d = derive(c)
+  const defs = deriveResources(c, d)
+
+  if (defs.length === 0) {
+    return (
+      <div className="card">
+        <h2>Feature uses</h2>
+        <p className="muted small">Nothing to track yet — per-rest uses from your class, discipline, species, and feats will appear here as you gain them.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="card">
+      <h2>Feature uses</h2>
+      <table className="ledger">
+        <tbody>
+          {defs.map((r) => {
+            const used = Math.min(c.resourceUses[r.key] ?? 0, r.max)
+            return (
+              <tr key={r.key}>
+                <td>
+                  <div style={{ fontWeight: 600 }}>{r.name}</div>
+                  <div className="small muted">{r.source} · per {r.recharge} rest</div>
+                </td>
+                <td className="right">
+                  <span className="row" style={{ gap: 5, justifyContent: 'flex-end' }}>
+                    {Array.from({ length: r.max }, (_, i) => (
+                      <button
+                        key={i}
+                        className={`chip${used > i ? ' on' : ''}`}
+                        style={{ minHeight: 36, minWidth: 36, padding: '2px 8px', justifyContent: 'center' }}
+                        aria-label={`${r.name} use ${i + 1}`}
+                        onClick={() =>
+                          updateCharacter(c.id, {
+                            resourceUses: { ...c.resourceUses, [r.key]: used > i ? i : i + 1 },
+                          })
+                        }
+                      >
+                        {used > i ? '●' : '○'}
+                      </button>
+                    ))}
+                  </span>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
@@ -274,9 +421,26 @@ function AttacksCard() {
   if (!active) return null
   const c = active
   const d = derive(c)
+  const isTactician = d.disciplineKey === 'tactician' && c.level >= 3
 
   function addAttack() {
     const a: Attack = { id: newId(), name: 'New attack', ability: 'int', proficient: true, damage: '1d6', damageType: 'piercing' }
+    updateCharacter(c.id, { attacks: [...c.attacks, a] })
+  }
+
+  function addWeapon(key: string) {
+    const w = getWeapon(key)
+    if (!w) return
+    const a: Attack = {
+      id: newId(),
+      name: w.name,
+      ability: defaultAbility(w),
+      proficient: savantProficientWith(w, isTactician),
+      damage: w.damage,
+      damageType: w.damageType,
+      range: w.range,
+      weaponKey: w.key,
+    }
     updateCharacter(c.id, { attacks: [...c.attacks, a] })
   }
 
@@ -284,14 +448,35 @@ function AttacksCard() {
     updateCharacter(c.id, { attacks: c.attacks.map((a) => (a.id === id ? { ...a, ...patch } : a)) })
   }
 
+  const masteriesInPlay = [...new Set(c.attacks.map((a) => getWeapon(a.weaponKey)?.mastery).filter((m) => m !== undefined))]
+
   return (
     <div className="card mt">
       <div className="row between">
         <h2 style={{ margin: 0 }}>Attacks</h2>
-        <button className="btn small" onClick={addAttack}>Add attack</button>
+        <span className="row">
+          <select
+            value=""
+            aria-label="Add weapon from the 2024 weapon table"
+            onChange={(e) => { if (e.target.value) addWeapon(e.target.value) }}
+            style={{ minHeight: 40, maxWidth: 220, border: '1px solid var(--rule-strong)', borderRadius: 6, background: 'var(--paper-raised)' }}
+          >
+            <option value="">Add weapon…</option>
+            {(['Simple Melee', 'Simple Ranged', 'Martial Melee', 'Martial Ranged'] as const).map((cat) => (
+              <optgroup key={cat} label={cat}>
+                {WEAPONS.filter((w) => w.category === cat).map((w) => (
+                  <option key={w.key} value={w.key}>
+                    {w.name} ({w.damage}, {MASTERIES[w.mastery].name}){savantProficientWith(w, isTactician) ? '' : ' — not proficient'}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          <button className="btn small" onClick={addAttack}>Custom</button>
+        </span>
       </div>
       {c.attacks.length === 0 ? (
-        <p className="muted small mt">No attacks recorded. Add your weapons here — attack bonus is computed from the chosen ability. Remember: against your Focus you can use INT.</p>
+        <p className="muted small mt">No attacks recorded. Pick a weapon from the 2024 table (damage, properties, and mastery fill in automatically) or add a custom attack. Remember: against your Focus you can use INT.</p>
       ) : (
         <table className="ledger mt">
           <thead>
@@ -301,6 +486,7 @@ function AttacksCard() {
             {c.attacks.map((a) => {
               const toHit = d.mods[a.ability] + (a.proficient ? d.pb : 0)
               const dmgMod = d.mods[a.ability]
+              const w = getWeapon(a.weaponKey)
               return (
                 <tr key={a.id}>
                   <td>
@@ -309,6 +495,12 @@ function AttacksCard() {
                       onChange={(e) => patchAttack(a.id, { name: e.target.value })}
                       style={{ border: 'none', background: 'transparent', width: '100%', minHeight: 36, fontWeight: 600 }}
                     />
+                    {w && (
+                      <div className="small muted">
+                        <span className="die-chip" style={{ fontSize: 11, padding: '1px 8px', marginRight: 6 }}>{MASTERIES[w.mastery].name}</span>
+                        {w.properties.join(', ') || '—'}
+                      </div>
+                    )}
                   </td>
                   <td>
                     <select value={a.ability} onChange={(e) => patchAttack(a.id, { ability: e.target.value as Attack['ability'] })} style={{ minHeight: 36 }}>
@@ -339,6 +531,22 @@ function AttacksCard() {
             })}
           </tbody>
         </table>
+      )}
+      {masteriesInPlay.length > 0 && (
+        <>
+          <hr className="rule" />
+          <div className="eyebrow">Weapon masteries in play</div>
+          {masteriesInPlay.map((m) => (
+            <details key={m} className="feature">
+              <summary><span className="f-name" style={{ fontSize: 15 }}>{MASTERIES[m!].name}</span></summary>
+              <div className="f-text">{MASTERIES[m!].text}</div>
+            </details>
+          ))}
+          <p className="small muted" style={{ marginBottom: 0 }}>
+            Mastery properties normally require a class feature that unlocks them (the Savant as written predates
+            them) — check with your DM whether they apply.
+          </p>
+        </>
       )}
     </div>
   )
