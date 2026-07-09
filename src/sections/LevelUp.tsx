@@ -2,11 +2,23 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../state/store'
 import type { AbilityKey, LevelChoices } from '../types'
-import { ABILITY_KEYS, ABILITY_NAMES } from '../types'
+import { ABILITY_KEYS, ABILITY_NAMES, SKILLS } from '../types'
+
+const getSkillName = (k: string) => SKILLS.find((s) => s.key === k)?.name ?? k
 import { derive, allPursuits, fmt } from '../rules/derive'
 import { gainsForLevel, pendingLevels } from '../rules/levelup'
 import { DISCIPLINES, PURSUITS, SCHOLARLY_FEATS, getDiscipline, getPursuit, SAVANT_TABLE } from '../data/savant'
+import { ORIGIN_FEATS } from '../data/backgrounds'
+import { bucketPicks } from '../data/lists'
+import type { ChoicePick } from '../data/lists'
 import { NoCharacter, PageHead } from './shared'
+import { PickRows } from './picks'
+
+/** Feats a player can pick at an ASI level, with any open sub-picks. */
+const FEAT_CATALOG: { key: string; name: string; text: string; group: string; picks?: ChoicePick[] }[] = [
+  ...SCHOLARLY_FEATS.map((f) => ({ key: f.key, name: f.name, text: f.text, group: 'Scholarly feats' })),
+  ...ORIGIN_FEATS.map((f) => ({ key: `origin-${f.key}`, name: f.name, text: f.text, group: 'Origin feats', picks: f.picks })),
+]
 
 export default function LevelUp() {
   const { active, updateCharacter } = useStore()
@@ -48,13 +60,16 @@ function LevelForm({ level, onCancelLevel }: { level: number; onCancelLevel?: ()
   const [hpMode, setHpMode] = useState<'fixed' | 'roll'>('fixed')
   const [hpRoll, setHpRoll] = useState('')
   const [pursuit, setPursuit] = useState(existing.pursuits?.[0] ?? '')
+  const [pursuitPicks, setPursuitPicks] = useState<Record<string, string>>({})
   const [discipline, setDiscipline] = useState(existing.discipline ?? '')
   const [asiMode, setAsiMode] = useState<'asi' | 'feat'>('asi')
   const [asiA, setAsiA] = useState<AbilityKey | ''>('')
   const [asiB, setAsiB] = useState<AbilityKey | ''>('')
   const [asiSplit, setAsiSplit] = useState<'2' | '1+1'>('2')
+  const [featKey, setFeatKey] = useState('')
   const [featName, setFeatName] = useState('')
   const [featText, setFeatText] = useState('')
+  const [featPicks, setFeatPicks] = useState<Record<string, string>>({})
   const [options, setOptions] = useState<string[]>(existing.disciplineOptions ?? [])
   const [grantedAlt, setGrantedAlt] = useState('')
 
@@ -81,15 +96,20 @@ function LevelForm({ level, onCancelLevel }: { level: number; onCancelLevel?: ()
     (p) => (!p.minLevel || level >= p.minLevel) && !known.includes(p.key),
   )
 
+  const selectedPursuitDef = availablePursuits.find((p) => p.key === pursuit)
+  const pursuitPicksComplete = (selectedPursuitDef?.picks ?? []).every((pk) => !!pursuitPicks[pk.id])
+  const selectedFeat = FEAT_CATALOG.find((f) => f.key === featKey)
+  const featPicksComplete = (selectedFeat?.picks ?? []).every((pk) => !!featPicks[pk.id])
+
   function valid(): boolean {
     if (level >= 2 && hpMode === 'roll' && !(parseInt(hpRoll, 10) >= 1 && parseInt(hpRoll, 10) <= 8)) return false
-    if (gains.needsPursuit && !pursuit) return false
+    if (gains.needsPursuit && (!pursuit || !pursuitPicksComplete)) return false
     if (gains.needsDiscipline && !discipline) return false
     if (gains.needsASI) {
       if (asiMode === 'asi') {
         if (asiSplit === '2' && !asiA) return false
         if (asiSplit === '1+1' && (!asiA || !asiB || asiA === asiB)) return false
-      } else if (!featName.trim()) return false
+      } else if (!featName.trim() || !featPicksComplete) return false
     }
     if (optionPicksDue > 0 && options.length !== optionPicksDue) return false
     if (grantedPursuitDef && grantedConflicts && !grantedAlt) return false
@@ -110,11 +130,16 @@ function LevelForm({ level, onCancelLevel }: { level: number; onCancelLevel?: ()
       if (asiMode === 'asi') {
         ch.asi = asiSplit === '2' ? { [asiA as AbilityKey]: 2 } : { [asiA as AbilityKey]: 1, [asiB as AbilityKey]: 1 }
       } else {
-        const preset = SCHOLARLY_FEATS.find((f) => f.name === featName)
-        ch.feat = { name: featName.trim(), description: featText.trim() || preset?.text }
+        ch.feat = { name: featName.trim(), description: featText.trim() || selectedFeat?.text }
       }
     }
     if (optionPicksDue > 0) ch.disciplineOptions = options
+
+    // Open picks resolved this level (pursuit + feat "of your choice") → granted proficiencies.
+    const picked = bucketPicks([...Object.values(pursuitPicks), ...Object.values(featPicks)])
+    if (picked.skills.length) ch.grantedSkills = picked.skills
+    if (picked.tools.length) ch.grantedTools = picked.tools
+    if (picked.languages.length) ch.grantedLanguages = picked.languages
     updateCharacter(c.id, (cur) => {
       const newChoices = { ...cur.choices, [level]: ch }
       // current HP grows by the HP gained at this level (derive() already
@@ -213,7 +238,7 @@ function LevelForm({ level, onCancelLevel }: { level: number; onCancelLevel?: ()
                     onClick={() => setOptions(on ? options.filter((x) => x !== o.key) : [...options, o.key])}
                   >
                     <div className="opt-title">{o.name}</div>
-                    <div className="opt-sub">{o.text.slice(0, 120)}…</div>
+                    <div className="opt-sub">{o.text}</div>
                   </button>
                 )
               })}
@@ -248,12 +273,20 @@ function LevelForm({ level, onCancelLevel }: { level: number; onCancelLevel?: ()
           <h2>Master a Scholarly Pursuit</h2>
           <div className="grid cols-2">
             {availablePursuits.map((p) => (
-              <button key={p.key} className={`opt${pursuit === p.key ? ' selected' : ''}`} onClick={() => setPursuit(p.key)}>
+              <button key={p.key} className={`opt${pursuit === p.key ? ' selected' : ''}`} onClick={() => { setPursuit(p.key); setPursuitPicks({}) }}>
                 <div className="opt-title">{p.name} {p.source === 'expanded' && <span className="muted small">(expanded)</span>}</div>
-                <div className="opt-sub">{p.text.slice(0, 120)}…</div>
+                <div className="opt-sub">{p.text.split('. ')[0]}.</div>
               </button>
             ))}
           </div>
+          {selectedPursuitDef && (
+            <div className="info-panel">
+              <h4>{selectedPursuitDef.name}</h4>
+              {selectedPursuitDef.grantsSkill && <p className="lede">Grants proficiency in {getSkillName(selectedPursuitDef.grantsSkill)}.</p>}
+              <div className="trait"><div className="t-text">{selectedPursuitDef.text}</div></div>
+              {selectedPursuitDef.picks && <PickRows picks={selectedPursuitDef.picks} values={pursuitPicks} onChange={(id, v) => setPursuitPicks({ ...pursuitPicks, [id]: v })} />}
+            </div>
+          )}
         </div>
       )}
 
@@ -300,23 +333,47 @@ function LevelForm({ level, onCancelLevel }: { level: number; onCancelLevel?: ()
             </div>
           ) : (
             <div className="mt">
-              <div className="row">
-                {SCHOLARLY_FEATS.map((f) => (
-                  <button key={f.key} className={`chip${featName === f.name ? ' on' : ''}`} style={{ minHeight: 40 }} onClick={() => { setFeatName(f.name); setFeatText('') }}>
-                    {f.name}
+              <h3>Choose a feat</h3>
+              <div className="grid cols-2">
+                {FEAT_CATALOG.map((f) => (
+                  <button
+                    key={f.key}
+                    className={`opt${featKey === f.key ? ' selected' : ''}`}
+                    onClick={() => { setFeatKey(f.key); setFeatName(f.name); setFeatText(''); setFeatPicks({}) }}
+                  >
+                    <div className="opt-title">{f.name} <span className="muted small">{f.group === 'Origin feats' ? 'origin' : 'scholarly'}</span></div>
+                    <div className="opt-sub">{f.text.split('\n')[0].replace(/^[^:]+:\s*/, '')}</div>
                   </button>
                 ))}
+                <button
+                  className={`opt${featKey === 'custom' ? ' selected' : ''}`}
+                  onClick={() => { setFeatKey('custom'); setFeatName(''); setFeatText(''); setFeatPicks({}) }}
+                >
+                  <div className="opt-title">Custom feat</div>
+                  <div className="opt-sub">Any other feat from your source book — type its name and text.</div>
+                </button>
               </div>
-              <div className="grid cols-2 mt">
-                <div className="field">
-                  <label>Feat name</label>
-                  <input value={featName} onChange={(e) => setFeatName(e.target.value)} placeholder="Scholarly feat above, or any PHB feat" />
+
+              {selectedFeat && (
+                <div className="info-panel">
+                  <h4>{selectedFeat.name}</h4>
+                  <div className="trait"><div className="t-text">{selectedFeat.text}</div></div>
+                  {selectedFeat.picks && <PickRows picks={selectedFeat.picks} values={featPicks} onChange={(id, v) => setFeatPicks({ ...featPicks, [id]: v })} />}
                 </div>
-                <div className="field">
-                  <label>Description (for custom feats)</label>
-                  <textarea value={featText} onChange={(e) => setFeatText(e.target.value)} placeholder="Optional — scholarly feats fill in automatically" />
+              )}
+
+              {featKey === 'custom' && (
+                <div className="grid cols-2 mt">
+                  <div className="field">
+                    <label>Feat name</label>
+                    <input value={featName} onChange={(e) => setFeatName(e.target.value)} placeholder="e.g. Lucky, Alert…" autoFocus />
+                  </div>
+                  <div className="field">
+                    <label>Description</label>
+                    <textarea value={featText} onChange={(e) => setFeatText(e.target.value)} placeholder="What the feat does" />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>

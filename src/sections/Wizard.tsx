@@ -3,11 +3,37 @@ import { useNavigate } from 'react-router-dom'
 import { useStore, newId } from '../state/store'
 import type { AbilityKey, Character, InventoryItem } from '../types'
 import { ABILITY_KEYS, ABILITY_NAMES, SKILLS } from '../types'
-import { SPECIES } from '../data/species'
-import { BACKGROUNDS, getOriginFeat } from '../data/backgrounds'
-import { PURSUITS, SAVANT_SKILL_LIST, SAVANT_BASICS } from '../data/savant'
+import { SPECIES, defaultSize } from '../data/species'
+import type { SpeciesDef } from '../data/species'
+import { BACKGROUNDS, ORIGIN_FEATS, getOriginFeat } from '../data/backgrounds'
+import { PURSUITS, SAVANT_SKILL_LIST, SAVANT_EQUIP_CHOICES, SAVANT_EQUIP_FIXED } from '../data/savant'
+import { WEAPONS } from '../data/weapons'
+import { ALL_TOOLS, ARTISANS_TOOLS, GAMING_SETS, INSTRUMENTS, bucketPicks } from '../data/lists'
 import { derive, mod, fmt } from '../rules/derive'
 import { PageHead, Stepper } from './shared'
+import { PickRows, pickLabel } from './picks'
+
+const skillName = (k: string) => SKILLS.find((s) => s.key === k)?.name ?? k
+const SIMPLE_WEAPONS = WEAPONS.filter((w) => w.category.startsWith('Simple'))
+
+/** The list a background's "of your choice" tool draws from, keyed off its label. */
+function toolChoiceList(tool: string): string[] | null {
+  if (!/choice|one of|\(one/i.test(tool)) return null
+  if (/gaming/i.test(tool)) return GAMING_SETS
+  if (/instrument/i.test(tool)) return INSTRUMENTS
+  if (/artisan/i.test(tool)) return ARTISANS_TOOLS
+  return ALL_TOOLS
+}
+
+/** Non-collapsible feature-style block used in the wizard detail panels. */
+function Trait({ name, tag, text }: { name?: string; tag?: string; text: string }) {
+  return (
+    <div className="trait">
+      {name && <div className="t-name">{name}{tag && <span className="tag">{tag}</span>}</div>}
+      <div className="t-text">{text}</div>
+    </div>
+  )
+}
 
 const STEPS = ['Name', 'Species', 'Background', 'Abilities', 'Class', 'Review'] as const
 
@@ -24,7 +50,20 @@ export default function Wizard() {
   const [name, setName] = useState('')
   const [speciesKey, setSpeciesKey] = useState('')
   const [speciesVariant, setSpeciesVariant] = useState('')
+  const [size, setSize] = useState('')
+  const [speciesChoices, setSpeciesChoices] = useState<Record<string, string>>({})
+  /** sub-picks for a Versatile Origin feat (e.g. Human → Skilled → 3 skills/tools) */
+  const [featPicks, setFeatPicks] = useState<Record<string, string>>({})
+  const [equip, setEquip] = useState<Record<string, string>>({ weapon: 'a', ranged: 'a' })
+  /** weapon key chosen for an equipment option that needs one, keyed by choice id */
+  const [equipPicks, setEquipPicks] = useState<Record<string, string>>({})
+  /** chosen artisan's tools set (always required) */
+  const [artisanTool, setArtisanTool] = useState('')
+  /** encoded values for a pursuit's open picks, keyed by pick id */
+  const [pursuitPicks, setPursuitPicks] = useState<Record<string, string>>({})
   const [backgroundKey, setBackgroundKey] = useState('')
+  /** chosen tool when a background's tool is "of your choice" */
+  const [bgTool, setBgTool] = useState('')
   const [bonusMode, setBonusMode] = useState<'2-1' | '1-1-1'>('2-1')
   const [bonusTwo, setBonusTwo] = useState<AbilityKey | ''>('')
   const [bonusOne, setBonusOne] = useState<AbilityKey | ''>('')
@@ -35,7 +74,39 @@ export default function Wizard() {
   const [pursuit, setPursuit] = useState('')
 
   const species = SPECIES.find((s) => s.key === speciesKey)
+  const variant = species?.variants?.find((v) => v.key === speciesVariant)
   const background = BACKGROUNDS.find((b) => b.key === backgroundKey)
+
+  function chooseSpecies(s: SpeciesDef) {
+    setSpeciesKey(s.key)
+    setSpeciesVariant('')
+    setSize(defaultSize(s))
+    // pre-seed defaults; skill/originFeat stay empty until picked
+    const seeded: Record<string, string> = {}
+    for (const ch of s.choices ?? []) {
+      if (ch.kind === 'spellAbility') seeded[ch.id] = ch.options?.[0] ?? 'int'
+    }
+    setSpeciesChoices(seeded)
+  }
+
+  /** Non-size species choices that still need an answer. */
+  const speciesChoicesAnswered = (species?.choices ?? [])
+    .filter((ch) => ch.kind !== 'size')
+    .every((ch) => !!speciesChoices[ch.id])
+
+  const versatileChoice = species?.choices?.find((ch) => ch.kind === 'originFeat')
+  const versatileFeat = versatileChoice ? getOriginFeat(speciesChoices[versatileChoice.id] ?? '') : undefined
+  const versatilePicksComplete = (versatileFeat?.picks ?? []).every((pk) => !!featPicks[pk.id])
+
+  const selectedPursuit = PURSUITS.find((p) => p.key === pursuit)
+  const pursuitPicksComplete = (selectedPursuit?.picks ?? []).every((pk) => !!pursuitPicks[pk.id])
+  const bgToolList = background ? toolChoiceList(background.tool) : null
+
+  const equipmentComplete =
+    SAVANT_EQUIP_CHOICES.every((ch) => {
+      const opt = ch.options.find((o) => o.key === equip[ch.id])
+      return opt ? (opt.pick ? !!equipPicks[ch.id] : true) : false
+    }) && !!artisanTool
 
   const backgroundBonuses = useMemo(() => {
     const out: Partial<Record<AbilityKey, number>> = {}
@@ -63,13 +134,13 @@ export default function Wizard() {
   function stepValid(i: number): boolean {
     switch (i) {
       case 0: return name.trim().length > 0
-      case 1: return !!species && (!species.variants || !!speciesVariant)
-      case 2: return !!background && (bonusMode === '1-1-1' || (!!bonusTwo && !!bonusOne && bonusTwo !== bonusOne))
+      case 1: return !!species && (!species.variants || !!speciesVariant) && !!size && speciesChoicesAnswered && versatilePicksComplete
+      case 2: return !!background && (bonusMode === '1-1-1' || (!!bonusTwo && !!bonusOne && bonusTwo !== bonusOne)) && (!bgToolList || !!bgTool)
       case 3:
         if (method === 'standard') return ABILITY_KEYS.every((k) => arrayAssign[k] !== undefined)
         if (method === 'pointbuy') return pointsUsed === 27
         return true
-      case 4: return classSkills.length === 2 && !!pursuit
+      case 4: return classSkills.length === 2 && !!pursuit && pursuitPicksComplete && equipmentComplete
       default: return true
     }
   }
@@ -77,27 +148,64 @@ export default function Wizard() {
   function finish() {
     const id = newId()
     const now = new Date().toISOString()
-    const startingItems: InventoryItem[] = [
-      { id: newId(), name: 'Leather Armor', qty: 1, equipped: true },
-      { id: newId(), name: "Artisan's Tools", qty: 1, notes: 'your choice of set' },
-      { id: newId(), name: "Scholar's Pack", qty: 1 },
-    ]
+
+    const addItem = (it: { name: string; qty?: number; equipped?: boolean; notes?: string }): InventoryItem =>
+      ({ id: newId(), name: it.name, qty: it.qty ?? 1, equipped: it.equipped, notes: it.notes })
+
+    // Build starting inventory from fixed gear + the selected equipment options.
+    const startingItems: InventoryItem[] = SAVANT_EQUIP_FIXED.map(addItem)
+    if (artisanTool) startingItems.push(addItem({ name: artisanTool, notes: 'artisan tools' }))
+    for (const ch of SAVANT_EQUIP_CHOICES) {
+      const opt = ch.options.find((o) => o.key === equip[ch.id])
+      if (!opt) continue
+      if (opt.pick) {
+        const w = WEAPONS.find((x) => x.key === equipPicks[ch.id])
+        if (w) startingItems.push(addItem({ name: w.name, equipped: opt.pick.equipped }))
+      }
+      for (const it of opt.items) startingItems.push(addItem(it))
+    }
+
+    // Species creation choices: skill grants add to proficiencies, an Origin feat
+    // (Human Versatile) is recorded as a level-1 feat.
+    const speciesSkillGrants: string[] = []
+    let versatileFeat: { name: string; description?: string } | undefined
+    for (const ch of species?.choices ?? []) {
+      const val = speciesChoices[ch.id]
+      if (!val) continue
+      if (ch.kind === 'skill') speciesSkillGrants.push(val)
+      if (ch.kind === 'originFeat') {
+        const feat = getOriginFeat(val)
+        if (feat) versatileFeat = { name: feat.name, description: feat.text }
+      }
+    }
+
+    // Open picks (pursuit + Versatile feat) route to skills / tools / languages.
+    const picked = bucketPicks([...Object.values(pursuitPicks), ...Object.values(featPicks)])
+
+    const resolvedBgTool = background ? (bgToolList ? bgTool : background.tool) : undefined
+
     const c: Character = {
       id,
       name: name.trim(),
       speciesKey,
       speciesVariant: speciesVariant || undefined,
+      size,
+      speciesChoices,
       backgroundKey,
       backgroundBonuses,
       baseAbilities,
       level: 1,
       xp: 0,
       classSkills,
-      bonusSkills: background ? [...background.skills] : [],
+      bonusSkills: [...(background ? background.skills : []), ...speciesSkillGrants, ...picked.skills],
       expertise: [],
-      toolProficiencies: background ? [background.tool, "Artisan's Tools (one set)"] : [],
-      languages: ['Common'],
-      choices: { 1: { pursuits: [pursuit] } },
+      toolProficiencies: [
+        ...(resolvedBgTool ? [resolvedBgTool] : []),
+        ...(artisanTool ? [artisanTool] : []),
+        ...picked.tools,
+      ],
+      languages: ['Common', ...picked.languages],
+      choices: { 1: { pursuits: [pursuit], ...(versatileFeat ? { feat: versatileFeat } : {}) } },
       currentHP: 0,
       tempHP: 0,
       hitDiceSpent: 0,
@@ -155,16 +263,17 @@ export default function Wizard() {
               <button
                 key={s.key}
                 className={`opt${speciesKey === s.key ? ' selected' : ''}`}
-                onClick={() => { setSpeciesKey(s.key); setSpeciesVariant('') }}
+                onClick={() => chooseSpecies(s)}
               >
                 <div className="opt-title">{s.name}</div>
                 <div className="opt-sub">{s.size} · Speed {s.speed} ft · {s.traits.map((t) => t.name).join(', ')}</div>
               </button>
             ))}
           </div>
+
           {species?.variants && (
             <>
-              <h3>{species.variantLabel}</h3>
+              <h3>{species.variantLabel} — choose one</h3>
               <div className="grid cols-3">
                 {species.variants.map((v) => (
                   <button
@@ -173,11 +282,73 @@ export default function Wizard() {
                     onClick={() => setSpeciesVariant(v.key)}
                   >
                     <div className="opt-title">{v.name}</div>
-                    {v.traits[0] && <div className="opt-sub">{v.traits[0].text.slice(0, 90)}…</div>}
+                    {v.traits[0] && <div className="opt-sub">{v.traits[0].text}</div>}
                   </button>
                 ))}
               </div>
             </>
+          )}
+
+          {species?.choices?.map((ch) => (
+            <div className="choice-row" key={ch.id}>
+              <span className="c-label">{ch.label}</span>
+              {ch.help && <span className="c-help">{ch.help}</span>}
+              {ch.kind === 'size' || ch.kind === 'spellAbility' ? (
+                <div className="row">
+                  {(ch.options ?? []).map((opt) => {
+                    const isSize = ch.kind === 'size'
+                    const selected = isSize ? size === opt : speciesChoices[ch.id] === opt
+                    const label = ch.kind === 'spellAbility' ? ABILITY_NAMES[opt as AbilityKey] : opt
+                    return (
+                      <button
+                        key={opt}
+                        className={`chip${selected ? ' on' : ''}`}
+                        style={{ minHeight: 44 }}
+                        onClick={() => isSize ? setSize(opt) : setSpeciesChoices({ ...speciesChoices, [ch.id]: opt })}
+                      >
+                        {label}
+                      </button>
+                    )
+                  })}
+                </div>
+              ) : (
+                <select
+                  className="wz-select"
+                  value={speciesChoices[ch.id] ?? ''}
+                  onChange={(e) => { setSpeciesChoices({ ...speciesChoices, [ch.id]: e.target.value }); if (ch.kind === 'originFeat') setFeatPicks({}) }}
+                >
+                  <option value="">choose…</option>
+                  {ch.kind === 'originFeat'
+                    ? ORIGIN_FEATS.map((f) => <option key={f.key} value={f.key}>{f.name}</option>)
+                    : (ch.options ?? SKILLS.map((s) => s.key)).map((sk) => <option key={sk} value={sk}>{skillName(sk)}</option>)}
+                </select>
+              )}
+            </div>
+          ))}
+
+          {versatileFeat?.picks && (
+            <>
+              <h3 style={{ marginTop: 22 }}>{versatileFeat.name} — choose your proficiencies</h3>
+              <PickRows picks={versatileFeat.picks} values={featPicks} onChange={(id, v) => setFeatPicks({ ...featPicks, [id]: v })} />
+            </>
+          )}
+
+          {species && (
+            <div className="info-panel">
+              <h4>{species.name} traits</h4>
+              <p className="lede">
+                Size {size || species.size} · Speed {species.speed} ft
+                {variant ? ` · ${variant.name}` : ''}
+              </p>
+              {species.traits.map((t) => <Trait key={t.name} name={t.name} text={t.text} />)}
+              {variant?.traits.map((t) => <Trait key={t.name} name={t.name} tag={variant.name} text={t.text} />)}
+              {(() => {
+                const featChoice = species.choices?.find((c) => c.kind === 'originFeat')
+                const featKey = featChoice ? speciesChoices[featChoice.id] : undefined
+                const feat = featKey ? getOriginFeat(featKey) : undefined
+                return feat ? <Trait name={feat.name} tag="Origin feat" text={feat.text} /> : null
+              })()}
+            </div>
           )}
         </div>
       )}
@@ -190,7 +361,7 @@ export default function Wizard() {
               <button
                 key={b.key}
                 className={`opt${backgroundKey === b.key ? ' selected' : ''}`}
-                onClick={() => { setBackgroundKey(b.key); setBonusTwo(''); setBonusOne('') }}
+                onClick={() => { setBackgroundKey(b.key); setBonusTwo(''); setBonusOne(''); setBgTool('') }}
               >
                 <div className="opt-title">{b.name}</div>
                 <div className="opt-sub">
@@ -199,6 +370,28 @@ export default function Wizard() {
               </button>
             ))}
           </div>
+          {background && (
+            <div className="info-panel">
+              <h4>{background.name}</h4>
+              <p className="lede">{background.blurb}</p>
+              {(() => { const f = getOriginFeat(background.featKey); return f ? <Trait name={f.name} tag="Origin feat" text={f.text} /> : null })()}
+              <Trait name="Skill proficiencies" text={background.skills.map(skillName).join(', ')} />
+              {bgToolList ? (
+                <div className="trait">
+                  <div className="t-name">Tool proficiency <span className="tag">choose one</span></div>
+                  <div className="t-text">{background.tool}</div>
+                  <select className="wz-select" style={{ marginTop: 8 }} value={bgTool} onChange={(e) => setBgTool(e.target.value)}>
+                    <option value="">choose…</option>
+                    {bgToolList.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+              ) : (
+                <Trait name="Tool proficiency" text={background.tool} />
+              )}
+              <Trait name="Starting equipment" text={background.equipment} />
+            </div>
+          )}
+
           {background && (
             <>
               <h3>Ability score increases</h3>
@@ -342,18 +535,73 @@ export default function Wizard() {
           <h3>Scholarly Pursuit — choose one</h3>
           <div className="grid cols-2">
             {level1Pursuits.map((p) => (
-              <button key={p.key} className={`opt${pursuit === p.key ? ' selected' : ''}`} onClick={() => setPursuit(p.key)}>
+              <button key={p.key} className={`opt${pursuit === p.key ? ' selected' : ''}`} onClick={() => { setPursuit(p.key); setPursuitPicks({}) }}>
                 <div className="opt-title">{p.name}</div>
-                <div className="opt-sub">{p.text.slice(0, 130)}…</div>
+                <div className="opt-sub">{p.text.split('. ')[0]}.</div>
               </button>
             ))}
           </div>
+          {pursuit && (() => {
+            const p = level1Pursuits.find((x) => x.key === pursuit)
+            return p ? (
+              <div className="info-panel">
+                <h4>{p.name}</h4>
+                {p.grantsSkill && <p className="lede">Grants proficiency in {skillName(p.grantsSkill)}.</p>}
+                <Trait text={p.text} />
+                {p.picks && <PickRows picks={p.picks} values={pursuitPicks} onChange={(id, v) => setPursuitPicks({ ...pursuitPicks, [id]: v })} />}
+              </div>
+            ) : null
+          })()}
 
-          <h3>Starting equipment</h3>
-          <ul className="small muted">
-            {SAVANT_BASICS.startingEquipment.map((e) => <li key={e}>{e}</li>)}
-          </ul>
-          <p className="small muted">Armor, tools, and pack are added to your inventory automatically — add your weapon picks in the Inventory section.</p>
+          <h3>Starting equipment — choose your gear</h3>
+          {SAVANT_EQUIP_CHOICES.map((ch) => {
+            const selectedOpt = ch.options.find((o) => o.key === equip[ch.id])
+            return (
+              <div className="choice-row" key={ch.id}>
+                <span className="c-label">{ch.prompt}</span>
+                <div className="row">
+                  {ch.options.map((o) => (
+                    <button
+                      key={o.key}
+                      className={`opt${equip[ch.id] === o.key ? ' selected' : ''}`}
+                      style={{ flex: '1 1 220px' }}
+                      onClick={() => setEquip({ ...equip, [ch.id]: o.key })}
+                    >
+                      <div className="opt-title">({o.key}) {o.label}</div>
+                      <div className="opt-sub">
+                        {o.pick ? 'Pick a specific weapon below' : o.items.map((it) => `${it.name}${it.qty && it.qty > 1 ? ` ×${it.qty}` : ''}`).join(', ')}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                {selectedOpt?.pick && (
+                  <select
+                    className="wz-select"
+                    value={equipPicks[ch.id] ?? ''}
+                    onChange={(e) => setEquipPicks({ ...equipPicks, [ch.id]: e.target.value })}
+                  >
+                    <option value="">choose a {selectedOpt.pick.category} weapon…</option>
+                    {(selectedOpt.pick.category === 'simple' ? SIMPLE_WEAPONS : WEAPONS).map((w) => (
+                      <option key={w.key} value={w.key}>{w.name} ({w.damage} {w.damageType})</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            )
+          })}
+
+          <div className="choice-row">
+            <span className="c-label">Artisan's tools — choose a set</span>
+            <span className="c-help">The Savant grants proficiency with one set of artisan's tools.</span>
+            <select className="wz-select" value={artisanTool} onChange={(e) => setArtisanTool(e.target.value)}>
+              <option value="">choose…</option>
+              {ARTISANS_TOOLS.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+
+          <p className="small muted mt">
+            Always included: {SAVANT_EQUIP_FIXED.map((i) => i.name).join(', ')}. Everything you pick lands in your Inventory.
+          </p>
         </div>
       )}
 
@@ -363,7 +611,17 @@ export default function Wizard() {
           <table className="ledger">
             <tbody>
               <tr><td>Name</td><td className="right" style={{ fontWeight: 600 }}>{name}</td></tr>
-              <tr><td>Species</td><td className="right">{species.name}{speciesVariant && ` — ${species.variants?.find((v) => v.key === speciesVariant)?.name}`}</td></tr>
+              <tr><td>Species</td><td className="right">{species.name}{variant && ` — ${variant.name}`} · {size}</td></tr>
+              {species.choices?.filter((ch) => ch.kind !== 'size' && speciesChoices[ch.id]).map((ch) => (
+                <tr key={ch.id}>
+                  <td>{ch.label}</td>
+                  <td className="right">
+                    {ch.kind === 'originFeat' ? getOriginFeat(speciesChoices[ch.id])?.name
+                      : ch.kind === 'spellAbility' ? ABILITY_NAMES[speciesChoices[ch.id] as AbilityKey]
+                      : skillName(speciesChoices[ch.id])}
+                  </td>
+                </tr>
+              ))}
               <tr><td>Background</td><td className="right">{background.name} ({getOriginFeat(background.featKey)?.name})</td></tr>
               <tr>
                 <td>Abilities</td>
@@ -372,7 +630,27 @@ export default function Wizard() {
                 </td>
               </tr>
               <tr><td>Class skills</td><td className="right">{classSkills.map((sk) => SKILLS.find((x) => x.key === sk)?.name).join(', ')}</td></tr>
-              <tr><td>Scholarly Pursuit</td><td className="right">{PURSUITS.find((p) => p.key === pursuit)?.name}</td></tr>
+              <tr>
+                <td>Scholarly Pursuit</td>
+                <td className="right">
+                  {selectedPursuit?.name}
+                  {selectedPursuit?.picks?.length ? ` (${selectedPursuit.picks.map((pk) => pickLabel(pursuitPicks[pk.id] ?? '')).filter(Boolean).join(', ')})` : ''}
+                </td>
+              </tr>
+              <tr>
+                <td>Tools</td>
+                <td className="right">{[bgToolList ? bgTool : background.tool, artisanTool].filter(Boolean).join(', ')}</td>
+              </tr>
+              <tr>
+                <td>Weapons &amp; gear</td>
+                <td className="right">
+                  {SAVANT_EQUIP_CHOICES.map((ch) => {
+                    const opt = ch.options.find((o) => o.key === equip[ch.id])
+                    if (opt?.pick) return WEAPONS.find((w) => w.key === equipPicks[ch.id])?.name
+                    return opt?.items.map((it) => it.name).join(' + ')
+                  }).filter(Boolean).join(', ')}, {SAVANT_EQUIP_FIXED.map((i) => i.name).join(', ')}
+                </td>
+              </tr>
               <tr><td>Saving throws</td><td className="right">Intelligence, Wisdom</td></tr>
               <tr><td>Level 1 features</td><td className="right">Adroit Analysis · Predictive Defense · Scholarly Pursuits</td></tr>
             </tbody>

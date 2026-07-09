@@ -68,6 +68,20 @@ export function disciplineKey(c: Character): string | undefined {
   return undefined
 }
 
+/** Base tool proficiencies (from creation) plus any granted by level-up picks. */
+export function characterTools(c: Character): string[] {
+  const set = new Set<string>(c.toolProficiencies)
+  for (const ch of Object.values(c.choices)) for (const t of ch.grantedTools ?? []) set.add(t)
+  return [...set]
+}
+
+/** Known languages: base plus any learned via level-up picks. */
+export function characterLanguages(c: Character): string[] {
+  const set = new Set<string>(c.languages)
+  for (const ch of Object.values(c.choices)) for (const l of ch.grantedLanguages ?? []) set.add(l)
+  return [...set]
+}
+
 export function derive(c: Character): Derived {
   const abilities = finalAbilities(c)
   const mods = {} as Record<AbilityKey, number>
@@ -116,6 +130,10 @@ export function derive(c: Character): Derived {
   for (const pk of pursuits) {
     const p = PURSUITS.find((x) => x.key === pk)
     if (p?.grantsSkill) skillProficiencies.add(p.grantsSkill)
+  }
+  // skills granted by open picks resolved at level-up
+  for (const ch of Object.values(c.choices)) {
+    for (const s of ch.grantedSkills ?? []) skillProficiencies.add(s)
   }
 
   const skills: Record<string, number> = {}

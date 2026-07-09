@@ -58,6 +58,38 @@ export const SAVANT_BASICS = {
   ],
 }
 
+export interface EquipItem { name: string; qty?: number; equipped?: boolean; notes?: string }
+/** An open pick an equipment option requires (e.g. "a simple weapon of your choice"). */
+export interface EquipPick { kind: 'weapon'; category: 'simple' | 'any'; equipped?: boolean }
+export interface EquipOption { key: string; label: string; items: EquipItem[]; pick?: EquipPick }
+export interface EquipChoice { id: string; prompt: string; options: EquipOption[] }
+
+/** Selectable starting-equipment choices for a 1st-level Savant. */
+export const SAVANT_EQUIP_CHOICES: EquipChoice[] = [
+  {
+    id: 'weapon',
+    prompt: 'Primary weapon',
+    options: [
+      { key: 'a', label: 'A simple weapon of your choice', items: [], pick: { kind: 'weapon', category: 'simple', equipped: true } },
+      { key: 'b', label: 'A shortsword', items: [{ name: 'Shortsword', equipped: true }] },
+    ],
+  },
+  {
+    id: 'ranged',
+    prompt: 'Ranged option',
+    options: [
+      { key: 'a', label: 'A light crossbow and 20 bolts', items: [{ name: 'Light Crossbow' }, { name: 'Bolts', qty: 20 }] },
+      { key: 'b', label: 'Two daggers', items: [{ name: 'Dagger', qty: 2 }] },
+    ],
+  },
+]
+
+/** Always granted (armor + pack). Artisan's tools are a separate pick. */
+export const SAVANT_EQUIP_FIXED: EquipItem[] = [
+  { name: 'Leather Armor', equipped: true },
+  { name: "Scholar's Pack" },
+]
+
 export interface FeatureDef {
   name: string
   level: number
@@ -742,6 +774,13 @@ Also, whenever you use a Wondrous Theme reaction, you can grant one creature und
 // Scholarly Pursuits
 // ---------------------------------------------------------------------------
 
+/** An open "of your choice" pick a pursuit forces the player to resolve. */
+export interface PursuitPick {
+  id: string
+  label: string
+  from: 'skill' | 'savant-skill' | 'tool' | 'language' | 'any-proficiency'
+}
+
 export interface PursuitDef {
   key: string
   name: string
@@ -750,6 +789,8 @@ export interface PursuitDef {
   minLevel?: number
   /** skill proficiency granted, if any */
   grantsSkill?: string
+  /** open picks the player must resolve when mastering this pursuit */
+  picks?: PursuitPick[]
   text: string
 }
 
@@ -764,6 +805,7 @@ export const PURSUITS: PursuitDef[] = [
   },
   {
     key: 'quick-study', name: 'Quick Study', source: 'core',
+    picks: [{ id: 'prof', label: 'Skill, tool, or language', from: 'any-proficiency' }],
     text: `You learn exceptionally fast. You gain proficiency in one skill or tool, or learn to speak and read a language of your choice. Over the course of 1 hour, which can be during a short or long rest, you can replace this proficiency or language with another of your choice, so long as you have an example to learn from, such as a teacher or manual.`,
   },
   {
@@ -809,6 +851,11 @@ Whenever you make a Charisma check to interact with a local ruler or otherwise i
   // --- Expanded pursuits ---
   {
     key: 'polymath', name: 'Polymath', source: 'expanded',
+    picks: [
+      { id: 'skill', label: 'Skill (Savant list)', from: 'savant-skill' },
+      { id: 'tool', label: 'Tool', from: 'tool' },
+      { id: 'language', label: 'Language', from: 'language' },
+    ],
     text: `You have a knack for picking up new skills, though you may not be a master of them all. You gain proficiency in one skill from the Savant skill list, one tool of your choice, and you learn to speak, read, and write one language of your choice.`,
   },
   {

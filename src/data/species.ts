@@ -11,6 +11,19 @@ export interface SpeciesVariant {
   traits: SpeciesTrait[]
 }
 
+/** A decision a species asks you to make at creation. */
+export type SpeciesChoiceKind = 'size' | 'skill' | 'originFeat' | 'spellAbility'
+
+export interface SpeciesChoice {
+  /** stable id, stored on the character */
+  id: string
+  label: string
+  help?: string
+  kind: SpeciesChoiceKind
+  /** fixed option keys for size/spellAbility; for skill, an allow-list of skill keys (omit = any) */
+  options?: string[]
+}
+
 export interface SpeciesDef {
   key: string
   name: string
@@ -19,7 +32,12 @@ export interface SpeciesDef {
   traits: SpeciesTrait[]
   variantLabel?: string
   variants?: SpeciesVariant[]
+  choices?: SpeciesChoice[]
 }
+
+/** Reusable choices */
+const SIZE_CHOICE: SpeciesChoice = { id: 'size', label: 'Size', kind: 'size', options: ['Medium', 'Small'], help: 'This species can be Medium or Small.' }
+const SPELL_ABILITY_CHOICE: SpeciesChoice = { id: 'spell-ability', label: 'Spellcasting ability', kind: 'spellAbility', options: ['int', 'wis', 'cha'], help: 'Ability used for spells granted by this species.' }
 
 export const SPECIES: SpeciesDef[] = [
   {
@@ -34,6 +52,7 @@ export const SPECIES: SpeciesDef[] = [
       { name: 'Light Bearer', text: 'You know the Light cantrip. Charisma is your spellcasting ability for it.' },
       { name: 'Celestial Revelation', text: 'When you reach character level 3, as a Bonus Action you can transform for 1 minute or until you end it (once per Long Rest). Choose Heavenly Wings (Fly Speed equal to your Speed), Inner Radiance (Bright Light 10 ft, at the end of your turns each creature within 10 feet takes Radiant damage equal to your Proficiency Bonus), or Necrotic Shroud (creatures within 10 feet must succeed on a Charisma save or be Frightened until end of your next turn). Once per turn while transformed, you can deal extra damage equal to your Proficiency Bonus (Radiant, or Necrotic for Necrotic Shroud) when you hit with an attack or deal spell damage.' },
     ],
+    choices: [SIZE_CHOICE],
   },
   {
     key: 'dragonborn',
@@ -97,6 +116,10 @@ export const SPECIES: SpeciesDef[] = [
       { name: 'Keen Senses', text: 'You have proficiency in the Insight, Perception, or Survival skill (choose one).' },
       { name: 'Trance', text: "You don't need to sleep and magic can't put you to sleep. You can finish a Long Rest in 4 hours in a trancelike meditation." },
     ],
+    choices: [
+      { id: 'keen-senses', label: 'Keen Senses — skill', kind: 'skill', options: ['insight', 'perception', 'survival'], help: 'Proficiency in one of Insight, Perception, or Survival.' },
+      SPELL_ABILITY_CHOICE,
+    ],
   },
   {
     key: 'gnome',
@@ -117,6 +140,7 @@ export const SPECIES: SpeciesDef[] = [
       { name: 'Gnomish Cunning', text: 'You have Advantage on Intelligence, Wisdom, and Charisma saving throws.' },
       { name: 'Gnomish Lineage', text: 'Choose Forest Gnome or Rock Gnome. Intelligence, Wisdom, or Charisma is your spellcasting ability for its spells (choose when you select the lineage).' },
     ],
+    choices: [SPELL_ABILITY_CHOICE],
   },
   {
     key: 'goliath',
@@ -160,6 +184,11 @@ export const SPECIES: SpeciesDef[] = [
       { name: 'Skillful', text: 'You gain proficiency in one skill of your choice.' },
       { name: 'Versatile', text: 'You gain an Origin feat of your choice (Skilled is recommended).' },
     ],
+    choices: [
+      SIZE_CHOICE,
+      { id: 'skillful', label: 'Skillful — extra skill', kind: 'skill', help: 'Proficiency in one skill of your choice.' },
+      { id: 'versatile', label: 'Versatile — Origin feat', kind: 'originFeat', help: 'An Origin feat of your choice (Skilled is recommended).' },
+    ],
   },
   {
     key: 'orc',
@@ -194,9 +223,17 @@ export const SPECIES: SpeciesDef[] = [
       { name: 'Fiendish Legacy', text: 'Choose a legacy (Abyssal, Chthonic, or Infernal). You gain its benefits; Intelligence, Wisdom, or Charisma is your spellcasting ability for its spells (choose when you select the legacy).' },
       { name: 'Otherworldly Presence', text: 'You know the Thaumaturgy cantrip, using the same spellcasting ability as your Fiendish Legacy.' },
     ],
+    choices: [SIZE_CHOICE, SPELL_ABILITY_CHOICE],
   },
 ]
 
 export function getSpecies(key: string): SpeciesDef | undefined {
   return SPECIES.find((s) => s.key === key)
+}
+
+/** Default size for a species — the first size choice option, else parsed from its size text. */
+export function defaultSize(s: SpeciesDef): string {
+  const sizeChoice = s.choices?.find((c) => c.kind === 'size')
+  if (sizeChoice?.options?.length) return sizeChoice.options[0]
+  return s.size.split(/\bor\b|,|\(/)[0].trim()
 }

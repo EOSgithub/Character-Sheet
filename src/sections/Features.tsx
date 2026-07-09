@@ -1,5 +1,5 @@
 import { useStore } from '../state/store'
-import { derive } from '../rules/derive'
+import { derive, characterTools, characterLanguages } from '../rules/derive'
 import { getSpecies } from '../data/species'
 import { getBackground, getOriginFeat } from '../data/backgrounds'
 import { getDiscipline, getPursuit, SAVANT_FEATURES, SCHOLARLY_FEATS } from '../data/savant'
@@ -111,6 +111,22 @@ export default function Features() {
         {variant?.traits.map((t) => (
           <Feature key={t.name} name={t.name} meta={variant.name} text={t.text} />
         ))}
+      </div>
+
+      <div className="card">
+        <h2>Proficiencies</h2>
+        <div className="grid cols-2">
+          <div>
+            <h3>Tools</h3>
+            {characterTools(c).length === 0
+              ? <p className="muted small">None yet.</p>
+              : <div className="row">{characterTools(c).map((t) => <span key={t} className="chip">{t}</span>)}</div>}
+          </div>
+          <div>
+            <h3>Languages</h3>
+            <div className="row">{characterLanguages(c).map((l) => <span key={l} className="chip">{l}</span>)}</div>
+          </div>
+        </div>
       </div>
 
       {background && (

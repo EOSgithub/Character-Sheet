@@ -753,6 +753,49 @@ input, select, textarea { font: inherit; color: var(--ink); }
 .steps .step.now { color: var(--prussian); border-color: var(--prussian); }
 .steps .step.done { color: var(--moss); border-color: var(--moss); }
 
+/* wizard choice detail + trait blocks */
+.info-panel {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius-sm);
+  background: var(--card-2);
+  padding: 14px 16px;
+  margin-top: 14px;
+}
+.info-panel > h4 {
+  margin: 0 0 3px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+}
+.info-panel .lede { color: var(--graphite); font-size: 13px; margin: 0 0 8px; }
+
+.trait { padding: 9px 0; border-bottom: 1px solid var(--line); }
+.trait:last-child { border-bottom: none; padding-bottom: 0; }
+.trait .t-name { font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+.trait .t-name .tag {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
+  color: var(--brass); text-transform: uppercase; margin-left: 8px;
+}
+.trait .t-text { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin-top: 2px; white-space: pre-line; }
+
+/* a labelled inline choice control */
+.choice-row { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+.choice-row > .c-label {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--graphite);
+}
+.choice-row > .c-help { font-size: 12.5px; color: var(--graphite); margin: -2px 0 2px; }
+
+.wz-select {
+  min-height: 44px;
+  max-width: 360px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  background: var(--white);
+}
+.wz-select:focus { outline: none; border-color: var(--prussian); box-shadow: 0 0 0 3px var(--prussian-tint); }
+
 /* ---------------------------- Adroit Analysis ---------------------------- */
 /* The Savant's signature — styled as an open casebook. */
 
@@ -813,9 +856,17 @@ input, select, textarea { font: inherit; color: var(--ink); }
 .comp-nav {
   position: sticky;
   top: 0;
+  align-self: start;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  padding-right: 4px;
+}
+@media (max-width: 860px) {
+  .comp-nav { position: static; max-height: none; overflow: visible; }
 }
 .comp-nav button {
   text-align: left;

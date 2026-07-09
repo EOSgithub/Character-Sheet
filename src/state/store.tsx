@@ -24,7 +24,12 @@ const StoreContext = createContext<StoreValue | null>(null)
 
 /** Fill in fields added after a character was first saved. */
 function migrate(c: Character): Character {
-  return { ...c, resourceUses: c.resourceUses ?? {}, heroicInspiration: c.heroicInspiration ?? false }
+  return {
+    ...c,
+    resourceUses: c.resourceUses ?? {},
+    heroicInspiration: c.heroicInspiration ?? false,
+    speciesChoices: c.speciesChoices ?? {},
+  }
 }
 
 function load(): AppState {

@@ -111,6 +111,12 @@ export interface LevelChoices {
   discipline?: string
   /** Rune Scribe runes / Culinarian recipes picked at this level */
   disciplineOptions?: string[]
+  /** skills granted by open picks resolved at this level (pursuit/feat "of your choice") */
+  grantedSkills?: string[]
+  /** tool proficiencies granted by open picks resolved at this level */
+  grantedTools?: string[]
+  /** languages learned via open picks resolved at this level */
+  grantedLanguages?: string[]
   /** HP rolled/taken for this level (levels 2+); level 1 is fixed */
   hp?: number
 }
@@ -139,6 +145,10 @@ export interface Character {
   speciesKey: string
   /** species lineage/ancestry option, if the species has one */
   speciesVariant?: string
+  /** chosen size, e.g. 'Medium' */
+  size?: string
+  /** species creation choices keyed by choice id (size, skillful, versatile, keen-senses, spell-ability) */
+  speciesChoices?: Record<string, string>
   backgroundKey: string
   /** +2/+1 (or +1/+1/+1) assignment from background */
   backgroundBonuses: Partial<Record<AbilityKey, number>>
