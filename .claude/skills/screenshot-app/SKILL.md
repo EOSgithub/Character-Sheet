@@ -1,0 +1,50 @@
+---
+name: screenshot-app
+description: Capture rendered screenshots of the Savant Codex app for visual/design review. Use whenever you need to SEE the running UI — before/after a frontend or CSS change, to take stock of the current design, to verify layout at desktop or mobile widths, or to check light/dark themes. Seeds a sample character so every page has real content.
+---
+
+# Screenshot the Savant Codex app
+
+A Playwright runner seeds a sample character into `localStorage` and captures
+every page, fully populated, at desktop and mobile widths. Use it instead of
+writing ad-hoc screenshot code.
+
+## Run it
+
+The dev server must be running. Then:
+
+```bash
+npm run dev          # terminal 1 (if not already up)
+npm run shots        # terminal 2 — writes to ./screenshots
+```
+
+Output: `screenshots/<route>-<view>.png` (e.g. `battle-desktop.png`,
+`home-mobile.png`). Files overwrite by name; the dir is never wiped, so a
+scoped `ONLY=` run leaves other shots intact for before/after comparison.
+Read the PNGs to review them.
+
+Routes captured: `home, abilities, battle, features, inventory, compendium, wizard`.
+
+## Scope a run (env vars)
+
+```bash
+ONLY=battle,home npm run shots     # only these routes
+VIEWS=desktop npm run shots        # skip mobile (or VIEWS=mobile)
+THEME=dark npm run shots           # emulate dark color-scheme
+URL=http://localhost:5173/Character-Sheet/ npm run shots
+```
+
+When iterating on one page, use `ONLY=` + `VIEWS=` to keep runs fast.
+
+## How it works / gotchas
+
+- `scripts/screenshot.mjs` — the runner. It seeds `localStorage` via
+  `addInitScript` **before** the app mounts (the store reads storage once at
+  mount, so seeding after load would not take), then reloads each route.
+- `scripts/seed-character.mjs` — the sample character (level-5 High-Elf
+  Investigator with temp HP, an active Focus, an attack, inventory). Edit it to
+  exercise a different state.
+- App uses `HashRouter` under base `/Character-Sheet/`, so routes are
+  `.../#/battle` etc. The runner already handles this.
+- If it prints "No dev server", start `npm run dev` first.
+- `screenshots/` is gitignored.

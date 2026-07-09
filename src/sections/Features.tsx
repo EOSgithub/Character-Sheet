@@ -4,6 +4,7 @@ import { getSpecies } from '../data/species'
 import { getBackground, getOriginFeat } from '../data/backgrounds'
 import { getDiscipline, getPursuit, SAVANT_FEATURES, SCHOLARLY_FEATS } from '../data/savant'
 import { NoCharacter, PageHead } from './shared'
+import CharacterBand from './CharacterBand'
 
 function Feature({ name, meta, text, open }: { name: string; meta: string; text: string; open?: boolean }) {
   return (
@@ -54,7 +55,7 @@ export default function Features() {
 
   return (
     <>
-      <PageHead title="Features & Traits" sub={`${c.name} · Savant ${c.level}`} />
+      <CharacterBand section="Features & Traits" />
 
       <div className="card">
         <h2>Savant class features</h2>

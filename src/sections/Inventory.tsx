@@ -1,6 +1,7 @@
 import { useStore, newId } from '../state/store'
 import type { InventoryItem } from '../types'
 import { NoCharacter, PageHead, Stepper } from './shared'
+import CharacterBand from './CharacterBand'
 
 const ATTUNEMENT_SLOTS = 3
 
@@ -28,7 +29,7 @@ export default function Inventory() {
 
   return (
     <>
-      <PageHead title="Inventory & Attuned Items" sub={`${c.name} · Savant ${c.level}`} />
+      <CharacterBand section="Inventory" />
 
       <div className="card">
         <div className="row between">

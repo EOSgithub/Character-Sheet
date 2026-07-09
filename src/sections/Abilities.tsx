@@ -2,6 +2,7 @@ import { useStore } from '../state/store'
 import { derive, fmt } from '../rules/derive'
 import { ABILITY_KEYS, ABILITY_NAMES, SKILLS } from '../types'
 import { NoCharacter, PageHead } from './shared'
+import CharacterBand from './CharacterBand'
 
 export default function Abilities() {
   const { active } = useStore()
@@ -10,11 +11,11 @@ export default function Abilities() {
 
   return (
     <>
-      <PageHead title="Abilities, Saves & Skills" sub={`${active.name} · Savant ${active.level}`} />
+      <CharacterBand section="Abilities & Skills" />
 
       <div className="grid cols-3" style={{ gridTemplateColumns: 'repeat(6, 1fr)', gap: 10 }}>
         {ABILITY_KEYS.map((k) => (
-          <div className="stat-tile" key={k}>
+          <div className="stat-tile ability" key={k}>
             <div className="label">{ABILITY_NAMES[k]}</div>
             <div className="value">{fmt(d.mods[k])}</div>
             <div className="detail num">{d.abilities[k]}</div>

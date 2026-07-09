@@ -7,6 +7,7 @@ import Inventory from './sections/Inventory'
 import Compendium from './sections/Compendium'
 import Wizard from './sections/Wizard'
 import LevelUp from './sections/LevelUp'
+import { Reticle } from './sections/CharacterBand'
 
 const ICONS = {
   home: <path d="M3 11.5 12 4l9 7.5M5.5 10v9h13v-9" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />,
@@ -30,7 +31,10 @@ export default function App() {
   return (
     <div className="shell">
       <aside className="rail">
-        <div className="rail-brand">Savant<br />Codex</div>
+        <div className="rail-brand">
+          <Reticle className="mark" />
+          <span className="word">Savant<br />Codex</span>
+        </div>
         <nav>
           <Tab to="/" icon="home" label="Home" />
           <Tab to="/abilities" icon="abilities" label="Abilities" />

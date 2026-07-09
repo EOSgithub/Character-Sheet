@@ -7,6 +7,7 @@ import { newId } from '../state/store'
 import { deriveResources, applyShortRest, applyLongRest } from '../rules/resources'
 import { WEAPONS, MASTERIES, getWeapon, savantProficientWith, defaultAbility } from '../data/weapons'
 import { NoCharacter, PageHead, Stepper } from './shared'
+import CharacterBand, { Reticle } from './CharacterBand'
 
 export default function Battle() {
   const { active, updateCharacter } = useStore()
@@ -37,7 +38,7 @@ export default function Battle() {
 
   return (
     <>
-      <PageHead title="Battle Mode" sub={`${c.name} · Savant ${c.level}`} />
+      <CharacterBand section="Battle Mode" />
 
       <div className="grid cols-2">
         {/* ------------------------------ HP ------------------------------- */}
@@ -102,16 +103,10 @@ export default function Battle() {
           )}
         </div>
 
-        {/* ------------------------- combat measures ------------------------ */}
+        {/* ------------------------- defenses ------------------------------ */}
         <div className="card">
-          <h2>Combat measures</h2>
-          <div className="grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
-            <div className="stat-tile"><div className="label">AC</div><div className="value">{d.ac}</div></div>
-            <div className="stat-tile"><div className="label">Initiative</div><div className="value">{fmt(d.initiative)}</div></div>
-            <div className="stat-tile"><div className="label">Intellect die</div><div className="value">{d.intellectDie ? `d${d.intellectDie}` : '—'}</div></div>
-            <div className="stat-tile"><div className="label">Intellect DC</div><div className="value">{d.intellectDC}</div></div>
-          </div>
-          <div className="row mt">
+          <h2>Defenses</h2>
+          <div className="row">
             <div className="field" style={{ flex: 1 }}>
               <label>Armor worn</label>
               <select value={c.armor} onChange={(e) => updateCharacter(c.id, { armor: e.target.value as typeof c.armor })}>
@@ -343,7 +338,7 @@ function FocusPanel() {
       <div className="focus-panel idle mt">
         <div className="row between">
           <div>
-            <div className="eyebrow">Adroit Analysis</div>
+            <div className="eyebrow row" style={{ gap: 7 }}><Reticle className="focus-reticle" /> Adroit Analysis</div>
             <strong>No Focus designated.</strong>{' '}
             <span className="muted small">Bonus action: analyze a creature you can see within 60 ft.</span>
           </div>
@@ -361,7 +356,7 @@ function FocusPanel() {
   return (
     <div className="focus-panel mt">
       <div className="row between">
-        <div className="eyebrow" style={{ color: 'var(--prussian)' }}>Adroit Analysis · Focus</div>
+        <div className="eyebrow row" style={{ gap: 7, color: 'var(--prussian)' }}><Reticle className="focus-reticle" /> Adroit Analysis · Focus</div>
         <button className="btn small" onClick={() => updateCharacter(c.id, { focus: { active: false, name: '', clues: [], notes: '' } })}>
           End Focus
         </button>

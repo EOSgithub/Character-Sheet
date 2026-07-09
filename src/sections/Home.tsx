@@ -1,11 +1,11 @@
 import { useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore, exportCharacter } from '../state/store'
-import { derive, fmt } from '../rules/derive'
+import { derive } from '../rules/derive'
 import { pendingLevels } from '../rules/levelup'
 import { getSpecies } from '../data/species'
-import { getBackground } from '../data/backgrounds'
 import { getDiscipline } from '../data/savant'
+import CharacterBand from './CharacterBand'
 import type { Character } from '../types'
 
 export default function Home() {
@@ -30,12 +30,27 @@ export default function Home() {
 
   return (
     <>
-      <div className="page-head">
-        <h1>Savant Codex</h1>
-        <span className="sub">A character sheet for the Savant class · D&D 2024</span>
-      </div>
-
-      {active && <ActiveOverview />}
+      {active ? (
+        <CharacterBand
+          section="Overview"
+          action={active.level < 20 ? (
+            <button
+              className="btn brass"
+              onClick={() => {
+                updateCharacter(active.id, { level: active.level + 1 })
+                navigate('/level-up')
+              }}
+            >
+              Level up
+            </button>
+          ) : undefined}
+        />
+      ) : (
+        <div className="page-head">
+          <h1>Savant Codex</h1>
+          <span className="sub">A play-at-the-table sheet for the Savant · D&amp;D 2024</span>
+        </div>
+      )}
 
       <div className="card">
         <div className="row between">
@@ -123,52 +138,5 @@ export default function Home() {
         </div>
       )}
     </>
-  )
-}
-
-function ActiveOverview() {
-  const { active, updateCharacter } = useStore()
-  const navigate = useNavigate()
-  if (!active) return null
-  const d = derive(active)
-  const species = getSpecies(active.speciesKey)
-  const background = getBackground(active.backgroundKey)
-  const discipline = getDiscipline(d.disciplineKey)
-
-  return (
-    <div className="card">
-      <div className="row between">
-        <div>
-          <div className="eyebrow">Active character</div>
-          <div className="display" style={{ fontSize: 26 }}>{active.name}</div>
-          <div className="muted small">
-            {species?.name}{active.speciesVariant ? ` (${species?.variants?.find(v => v.key === active.speciesVariant)?.name})` : ''} · {background?.name} · Savant {discipline ? `(${discipline.name})` : ''}
-          </div>
-        </div>
-        <div className="row">
-          <span className="pill-level">LV {active.level}</span>
-          {active.level < 20 && (
-            <button
-              className="btn primary"
-              onClick={() => {
-                updateCharacter(active.id, { level: active.level + 1 })
-                navigate('/level-up')
-              }}
-            >
-              Level up
-            </button>
-          )}
-        </div>
-      </div>
-      <hr className="rule" />
-      <div className="grid cols-3" style={{ gridTemplateColumns: 'repeat(6, 1fr)', gap: 10 }}>
-        <div className="stat-tile"><div className="label">HP</div><div className="value">{active.currentHP}/{d.maxHP}</div></div>
-        <div className="stat-tile"><div className="label">AC</div><div className="value">{d.ac}</div></div>
-        <div className="stat-tile"><div className="label">Initiative</div><div className="value">{fmt(d.initiative)}</div></div>
-        <div className="stat-tile"><div className="label">Speed</div><div className="value">{d.speed}</div></div>
-        <div className="stat-tile"><div className="label">Intellect die</div><div className="value">{d.intellectDie ? `d${d.intellectDie}` : '—'}</div></div>
-        <div className="stat-tile"><div className="label">Intellect DC</div><div className="value">{d.intellectDC}</div></div>
-      </div>
-    </div>
   )
 }
