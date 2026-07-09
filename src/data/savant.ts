@@ -58,7 +58,7 @@ export const SAVANT_BASICS = {
   ],
 }
 
-export interface EquipItem { name: string; qty?: number; equipped?: boolean; notes?: string }
+export interface EquipItem { name: string; qty?: number; equipped?: boolean; notes?: string; category?: import('../types').ItemCategory }
 /** An open pick an equipment option requires (e.g. "a simple weapon of your choice"). */
 export interface EquipPick { kind: 'weapon'; category: 'simple' | 'any'; equipped?: boolean }
 export interface EquipOption { key: string; label: string; items: EquipItem[]; pick?: EquipPick }
@@ -71,23 +71,23 @@ export const SAVANT_EQUIP_CHOICES: EquipChoice[] = [
     prompt: 'Primary weapon',
     options: [
       { key: 'a', label: 'A simple weapon of your choice', items: [], pick: { kind: 'weapon', category: 'simple', equipped: true } },
-      { key: 'b', label: 'A shortsword', items: [{ name: 'Shortsword', equipped: true }] },
+      { key: 'b', label: 'A shortsword', items: [{ name: 'Shortsword', equipped: true, category: 'weapon' }] },
     ],
   },
   {
     id: 'ranged',
     prompt: 'Ranged option',
     options: [
-      { key: 'a', label: 'A light crossbow and 20 bolts', items: [{ name: 'Light Crossbow' }, { name: 'Bolts', qty: 20 }] },
-      { key: 'b', label: 'Two daggers', items: [{ name: 'Dagger', qty: 2 }] },
+      { key: 'a', label: 'A light crossbow and 20 bolts', items: [{ name: 'Light Crossbow', category: 'weapon' }, { name: 'Bolts', qty: 20, category: 'gear' }] },
+      { key: 'b', label: 'Two daggers', items: [{ name: 'Dagger', qty: 2, category: 'weapon' }] },
     ],
   },
 ]
 
 /** Always granted (armor + pack). Artisan's tools are a separate pick. */
 export const SAVANT_EQUIP_FIXED: EquipItem[] = [
-  { name: 'Leather Armor', equipped: true },
-  { name: "Scholar's Pack" },
+  { name: 'Leather Armor', equipped: true, category: 'armor' },
+  { name: "Scholar's Pack", category: 'gear' },
 ]
 
 export interface FeatureDef {
@@ -774,13 +774,6 @@ Also, whenever you use a Wondrous Theme reaction, you can grant one creature und
 // Scholarly Pursuits
 // ---------------------------------------------------------------------------
 
-/** An open "of your choice" pick a pursuit forces the player to resolve. */
-export interface PursuitPick {
-  id: string
-  label: string
-  from: 'skill' | 'savant-skill' | 'tool' | 'language' | 'any-proficiency'
-}
-
 export interface PursuitDef {
   key: string
   name: string
@@ -790,7 +783,7 @@ export interface PursuitDef {
   /** skill proficiency granted, if any */
   grantsSkill?: string
   /** open picks the player must resolve when mastering this pursuit */
-  picks?: PursuitPick[]
+  picks?: import('./lists').ChoicePick[]
   text: string
 }
 
@@ -825,6 +818,7 @@ You also know how to speak, read, and write a number of additional languages equ
   },
   {
     key: 'physical-fitness', name: 'Physical Fitness', source: 'core', minLevel: 4,
+    picks: [{ id: 'skill', label: 'Athletics or Acrobatics', from: 'skill', options: ['athletics', 'acrobatics'] }],
     text: `You know that the key to a healthy mind is a healthy body. You gain proficiency in either Athletics or Acrobatics. Whenever you make an ability check with that skill, you gain a bonus to your roll equal to one roll of your Intellect Die.
 Also, you gain a climbing speed and a swimming speed equal to your walking speed, and when you make a running jump, you add your Intelligence modifier to the distance.`,
   },
@@ -898,11 +892,13 @@ export interface ScholarlyFeatDef {
   key: string
   name: string
   text: string
+  picks?: import('./lists').FeatChoice[]
+  grantsAbility?: Partial<Record<import('../types').AbilityKey, number>>
 }
 
 export const SCHOLARLY_FEATS: ScholarlyFeatDef[] = [
   {
-    key: 'classical-artist', name: 'Classical Artist',
+    key: 'classical-artist', name: 'Classical Artist', grantsAbility: { int: 1 },
     text: `Your great intellect has allowed you to master what many would consider the fine arts:
 • Increase your Intelligence score by 1, to a maximum of 20.
 • You gain proficiency with both mason's tools and painter's supplies. Whenever you make an ability check with either tool, you can treat a roll of 9 or lower on the d20 as a 10.
@@ -911,6 +907,7 @@ export const SCHOLARLY_FEATS: ScholarlyFeatDef[] = [
   },
   {
     key: 'helpful-insights', name: 'Helpful Insights',
+    picks: [{ kind: 'ability', id: 'abi', label: 'Ability increase (+1)', abilities: ['int', 'wis'] }],
     text: `You always seem to have helpful advice for any situation:
 • You increase your Intelligence or Wisdom score by 1, up to a maximum of 20.
 • You can take the Help action as a bonus action on each of your turns.
@@ -926,14 +923,19 @@ export const SCHOLARLY_FEATS: ScholarlyFeatDef[] = [
 • +5: when forced to make a Wisdom saving throw, you can make an Intelligence saving throw instead.`,
   },
   {
-    key: 'mental-acuity', name: 'Mental Acuity',
+    key: 'mental-acuity', name: 'Mental Acuity', grantsAbility: { int: 1 },
+    picks: [
+      { kind: 'proficiency', id: 's1', label: 'Skill (1st)', from: 'skill', options: ['arcana', 'history', 'investigation', 'medicine', 'nature', 'religion'] },
+      { kind: 'proficiency', id: 's2', label: 'Skill (2nd)', from: 'skill', options: ['arcana', 'history', 'investigation', 'medicine', 'nature', 'religion'] },
+    ],
     text: `Your mind is a wonderful thing, capable of bursts of insight and mental fortitude:
 • Increase your Intelligence score by 1, to a maximum of 20.
 • You gain proficiency in two of: Arcana, History, Investigation, Medicine, Nature, or Religion.
 • Choose any two skills from that list: whenever you make an ability check with either, you can treat a roll of 7 or lower on the d20 as an 8.`,
   },
   {
-    key: 'scholar-of-lore', name: 'Scholar of Lore',
+    key: 'scholar-of-lore', name: 'Scholar of Lore', grantsAbility: { int: 1 },
+    picks: [{ kind: 'pursuit', id: 'pursuit', label: 'Scholarly Pursuit' }],
     text: `You have spent time learning everything there is to know about a specific area of study:
 • Increase your Intelligence score by 1, to a maximum of 20.
 • You master a Scholarly Pursuit of your choice from those available to the Savant. If the Pursuit has a Savant level prerequisite, you can learn it if your total level meets or exceeds it.

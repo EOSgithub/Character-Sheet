@@ -8,6 +8,9 @@ import { deriveResources, applyShortRest, applyLongRest } from '../rules/resourc
 import { WEAPONS, MASTERIES, getWeapon, savantProficientWith, defaultAbility } from '../data/weapons'
 import { NoCharacter, PageHead, Stepper } from './shared'
 import CharacterBand, { Reticle } from './CharacterBand'
+import FeatureRow from './FeatureRow'
+import Modal from './Modal'
+import type { AbilityKey } from '../types'
 
 export default function Battle() {
   const { active, updateCharacter } = useStore()
@@ -413,34 +416,20 @@ function FocusPanel() {
 
 function AttacksCard() {
   const { active, updateCharacter } = useStore()
+  const [editing, setEditing] = useState<Attack | 'new' | null>(null)
   if (!active) return null
   const c = active
   const d = derive(c)
   const isTactician = d.disciplineKey === 'tactician' && c.level >= 3
 
-  function addAttack() {
-    const a: Attack = { id: newId(), name: 'New attack', ability: 'int', proficient: true, damage: '1d6', damageType: 'piercing' }
-    updateCharacter(c.id, { attacks: [...c.attacks, a] })
+  function saveAttack(a: Attack) {
+    const exists = c.attacks.some((x) => x.id === a.id)
+    updateCharacter(c.id, { attacks: exists ? c.attacks.map((x) => (x.id === a.id ? a : x)) : [...c.attacks, a] })
+    setEditing(null)
   }
-
-  function addWeapon(key: string) {
-    const w = getWeapon(key)
-    if (!w) return
-    const a: Attack = {
-      id: newId(),
-      name: w.name,
-      ability: defaultAbility(w),
-      proficient: savantProficientWith(w, isTactician),
-      damage: w.damage,
-      damageType: w.damageType,
-      range: w.range,
-      weaponKey: w.key,
-    }
-    updateCharacter(c.id, { attacks: [...c.attacks, a] })
-  }
-
-  function patchAttack(id: string, patch: Partial<Attack>) {
-    updateCharacter(c.id, { attacks: c.attacks.map((a) => (a.id === id ? { ...a, ...patch } : a)) })
+  function removeAttack(id: string) {
+    updateCharacter(c.id, { attacks: c.attacks.filter((x) => x.id !== id) })
+    setEditing(null)
   }
 
   const masteriesInPlay = [...new Set(c.attacks.map((a) => getWeapon(a.weaponKey)?.mastery).filter((m) => m !== undefined))]
@@ -449,93 +438,52 @@ function AttacksCard() {
     <div className="card mt">
       <div className="row between">
         <h2 style={{ margin: 0 }}>Attacks</h2>
-        <span className="row">
-          <select
-            value=""
-            aria-label="Add weapon from the 2024 weapon table"
-            onChange={(e) => { if (e.target.value) addWeapon(e.target.value) }}
-            style={{ minHeight: 40, maxWidth: 220, border: '1px solid var(--rule-strong)', borderRadius: 6, background: 'var(--paper-raised)' }}
-          >
-            <option value="">Add weapon…</option>
-            {(['Simple Melee', 'Simple Ranged', 'Martial Melee', 'Martial Ranged'] as const).map((cat) => (
-              <optgroup key={cat} label={cat}>
-                {WEAPONS.filter((w) => w.category === cat).map((w) => (
-                  <option key={w.key} value={w.key}>
-                    {w.name} ({w.damage}, {MASTERIES[w.mastery].name}){savantProficientWith(w, isTactician) ? '' : ' — not proficient'}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
-          <button className="btn small" onClick={addAttack}>Custom</button>
-        </span>
+        <button className="btn small primary" onClick={() => setEditing('new')}>+ Add attack</button>
       </div>
       {c.attacks.length === 0 ? (
-        <p className="muted small mt">No attacks recorded. Pick a weapon from the 2024 table (damage, properties, and mastery fill in automatically) or add a custom attack. Remember: against your Focus you can use INT.</p>
+        <div className="empty" style={{ padding: '28px 20px' }}>
+          <p style={{ marginBottom: 14 }}>No attacks yet. Add one from the 2024 weapon table — damage, properties, and mastery fill in automatically — or build a custom attack. Against your Focus you can attack with INT.</p>
+          <button className="btn primary" onClick={() => setEditing('new')}>Add an attack</button>
+        </div>
       ) : (
-        <table className="ledger mt">
-          <thead>
-            <tr><th>Name</th><th>Ability</th><th className="right">To hit</th><th>Damage</th><th></th></tr>
-          </thead>
-          <tbody>
-            {c.attacks.map((a) => {
-              const toHit = d.mods[a.ability] + (a.proficient ? d.pb : 0)
-              const dmgMod = d.mods[a.ability]
-              const w = getWeapon(a.weaponKey)
-              return (
-                <tr key={a.id}>
-                  <td>
-                    <input
-                      value={a.name}
-                      onChange={(e) => patchAttack(a.id, { name: e.target.value })}
-                      style={{ border: 'none', background: 'transparent', width: '100%', minHeight: 36, fontWeight: 600 }}
-                    />
-                    {w && (
-                      <div className="small muted">
-                        <span className="die-chip" style={{ fontSize: 11, padding: '1px 8px', marginRight: 6 }}>{MASTERIES[w.mastery].name}</span>
-                        {w.properties.join(', ') || '—'}
-                      </div>
-                    )}
-                  </td>
-                  <td>
-                    <select value={a.ability} onChange={(e) => patchAttack(a.id, { ability: e.target.value as Attack['ability'] })} style={{ minHeight: 36 }}>
-                      <option value="str">STR</option><option value="dex">DEX</option><option value="int">INT</option>
-                    </select>
-                  </td>
-                  <td className="num right" style={{ fontSize: 18 }}>{fmt(toHit)}</td>
-                  <td>
-                    <span className="row" style={{ gap: 6 }}>
-                      <input
-                        value={a.damage}
-                        onChange={(e) => patchAttack(a.id, { damage: e.target.value })}
-                        style={{ border: '1px solid var(--rule)', borderRadius: 4, width: 70, minHeight: 36, textAlign: 'center', fontFamily: 'var(--font-mono)' }}
-                      />
-                      <span className="num">{fmt(dmgMod)}</span>
-                      <input
-                        value={a.damageType}
-                        onChange={(e) => patchAttack(a.id, { damageType: e.target.value })}
-                        style={{ border: 'none', background: 'transparent', width: 90, minHeight: 36, color: 'var(--graphite)' }}
-                      />
-                    </span>
-                  </td>
-                  <td className="right">
-                    <button className="btn small danger" onClick={() => updateCharacter(c.id, { attacks: c.attacks.filter((x) => x.id !== a.id) })}>✕</button>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <div className="mt">
+          {c.attacks.map((a) => {
+            const toHit = d.mods[a.ability] + (a.proficient ? d.pb : 0)
+            const dmgMod = d.mods[a.ability]
+            const w = getWeapon(a.weaponKey)
+            return (
+              <button key={a.id} className="atk-row" onClick={() => setEditing(a)}>
+                <span className="nm">
+                  <span className="t">{a.name}{!a.proficient && <span className="tag">not proficient</span>}</span>
+                  <span className="s">
+                    {w ? `${MASTERIES[w.mastery].name}${w.properties.length ? ' · ' + w.properties.join(', ') : ''}` : (a.range ? `Range ${a.range}` : 'Custom attack')}
+                  </span>
+                </span>
+                <span className="abil">{a.ability.toUpperCase()}</span>
+                <span className="hit"><span className="lbl">Hit</span>{fmt(toHit)}</span>
+                <span className="dmg">{a.damage} {fmt(dmgMod)} {a.damageType}</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+      {editing && (
+        <AttackModal
+          attack={editing === 'new' ? null : editing}
+          isTactician={isTactician}
+          mods={d.mods}
+          pb={d.pb}
+          onSave={saveAttack}
+          onDelete={editing !== 'new' ? () => removeAttack((editing as Attack).id) : undefined}
+          onClose={() => setEditing(null)}
+        />
       )}
       {masteriesInPlay.length > 0 && (
         <>
           <hr className="rule" />
           <div className="eyebrow">Weapon masteries in play</div>
           {masteriesInPlay.map((m) => (
-            <details key={m} className="feature">
-              <summary><span className="f-name" style={{ fontSize: 15 }}>{MASTERIES[m!].name}</span></summary>
-              <div className="f-text">{MASTERIES[m!].text}</div>
-            </details>
+            <FeatureRow key={m} name={MASTERIES[m!].name} meta="Mastery" text={MASTERIES[m!].text} />
           ))}
           <p className="small muted" style={{ marginBottom: 0 }}>
             Mastery properties normally require a class feature that unlocks them (the Savant as written predates
@@ -544,5 +492,110 @@ function AttacksCard() {
         </>
       )}
     </div>
+  )
+}
+
+const ABILS: AbilityKey[] = ['str', 'dex', 'int']
+
+/** Add or edit an attack — prefill from the 2024 weapon table, or go custom. */
+function AttackModal({ attack, isTactician, mods, pb, onSave, onDelete, onClose }: {
+  attack: Attack | null
+  isTactician: boolean
+  mods: Record<AbilityKey, number>
+  pb: number
+  onSave: (a: Attack) => void
+  onDelete?: () => void
+  onClose: () => void
+}) {
+  const [draft, setDraft] = useState<Attack>(
+    attack ?? { id: newId(), name: '', ability: 'int', proficient: true, damage: '1d6', damageType: 'piercing' },
+  )
+  const set = (patch: Partial<Attack>) => setDraft((a) => ({ ...a, ...patch }))
+
+  function pickWeapon(key: string) {
+    const w = getWeapon(key)
+    if (!w) return
+    set({
+      name: w.name, ability: defaultAbility(w), proficient: savantProficientWith(w, isTactician),
+      damage: w.damage, damageType: w.damageType, range: w.range, weaponKey: w.key,
+    })
+  }
+
+  const toHit = mods[draft.ability] + (draft.proficient ? pb : 0)
+  const canSave = draft.name.trim().length > 0
+
+  return (
+    <Modal
+      open
+      onClose={onClose}
+      title={attack ? 'Edit attack' : 'Add attack'}
+      subtitle="Pick a weapon to fill everything in, or enter a custom attack."
+      footer={
+        <>
+          {onDelete && <button className="btn danger" onClick={onDelete}>Delete</button>}
+          <span className="spacer" />
+          <button className="btn" onClick={onClose}>Cancel</button>
+          <button className="btn primary" disabled={!canSave} onClick={() => onSave({ ...draft, name: draft.name.trim() })}>
+            {attack ? 'Save changes' : 'Add attack'}
+          </button>
+        </>
+      }
+    >
+      <div className="field">
+        <label>From the 2024 weapon table</label>
+        <select className="wz-select" value={draft.weaponKey ?? ''} onChange={(e) => e.target.value ? pickWeapon(e.target.value) : set({ weaponKey: undefined })} style={{ maxWidth: 'none' }}>
+          <option value="">Custom attack…</option>
+          {(['Simple Melee', 'Simple Ranged', 'Martial Melee', 'Martial Ranged'] as const).map((cat) => (
+            <optgroup key={cat} label={cat}>
+              {WEAPONS.filter((w) => w.category === cat).map((w) => (
+                <option key={w.key} value={w.key}>
+                  {w.name} ({w.damage}, {MASTERIES[w.mastery].name}){savantProficientWith(w, isTactician) ? '' : ' — not proficient'}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+
+      <div className="field">
+        <label>Name</label>
+        <input value={draft.name} placeholder="e.g. Rapier, Dagger…" onChange={(e) => set({ name: e.target.value, weaponKey: undefined })} />
+      </div>
+
+      <div className="field">
+        <label>Attack ability</label>
+        <div className="row" style={{ gap: 7 }}>
+          {ABILS.map((k) => (
+            <button key={k} className={`chip${draft.ability === k ? ' on' : ''}`} style={{ minHeight: 40 }} onClick={() => set({ ability: k })}>
+              {k.toUpperCase()} {fmt(mods[k])}
+            </button>
+          ))}
+          <button className={`chip${draft.proficient ? ' on' : ''}`} style={{ minHeight: 40 }} onClick={() => set({ proficient: !draft.proficient })}>
+            {draft.proficient ? '✓ ' : ''}Proficient
+          </button>
+        </div>
+      </div>
+
+      <div className="row" style={{ gap: 16, marginTop: 14 }}>
+        <div className="field" style={{ flex: 1 }}>
+          <label>Damage dice</label>
+          <input value={draft.damage} placeholder="1d8" onChange={(e) => set({ damage: e.target.value })} style={{ fontFamily: 'var(--font-mono)' }} />
+        </div>
+        <div className="field" style={{ flex: 1 }}>
+          <label>Damage type</label>
+          <input value={draft.damageType} placeholder="piercing" onChange={(e) => set({ damageType: e.target.value })} />
+        </div>
+        <div className="field" style={{ flex: 1 }}>
+          <label>Range</label>
+          <input value={draft.range ?? ''} placeholder="—" onChange={(e) => set({ range: e.target.value || undefined })} />
+        </div>
+      </div>
+
+      <div className="info-panel" style={{ marginTop: 16 }}>
+        <span className="num" style={{ fontSize: 17 }}>{fmt(toHit)}</span> <span className="muted small">to hit</span>
+        <span className="muted"> · </span>
+        <span className="num" style={{ fontSize: 17 }}>{draft.damage} {fmt(mods[draft.ability])}</span> <span className="muted small">{draft.damageType} damage</span>
+      </div>
+    </Modal>
   )
 }

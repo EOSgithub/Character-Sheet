@@ -3,38 +3,52 @@
 // proficiency, and equipment.
 
 import type { AbilityKey } from '../types'
-import type { ChoicePick } from './lists'
+import type { FeatChoice } from './lists'
 
 export interface OriginFeatDef {
   key: string
   name: string
   text: string
   /** open "of your choice" grants the feat forces you to resolve */
-  picks?: ChoicePick[]
+  picks?: FeatChoice[]
+  /** fixed ability increases the feat grants (half-feats) */
+  grantsAbility?: Partial<Record<AbilityKey, number>>
 }
 
 export const ORIGIN_FEATS: OriginFeatDef[] = [
   { key: 'alert', name: 'Alert', text: 'Initiative Proficiency: add your Proficiency Bonus to Initiative rolls. Initiative Swap: immediately after rolling Initiative, you can swap your result with a willing ally in the same combat (unless either of you is Incapacitated).' },
   { key: 'crafter', name: 'Crafter', text: "Tool Proficiency: gain proficiency with three Artisan's Tools of your choice. Discount: 20% discount when buying nonmagical items. Fast Crafting: after a Long Rest, you can craft one piece of simple gear from a tool you're proficient with; it lasts until your next Long Rest.", picks: [
-    { id: 'tool1', label: "Artisan's tools (1st)", from: 'artisan-tool' },
-    { id: 'tool2', label: "Artisan's tools (2nd)", from: 'artisan-tool' },
-    { id: 'tool3', label: "Artisan's tools (3rd)", from: 'artisan-tool' },
+    { kind: 'proficiency', id: 'tool1', label: "Artisan's tools (1st)", from: 'artisan-tool' },
+    { kind: 'proficiency', id: 'tool2', label: "Artisan's tools (2nd)", from: 'artisan-tool' },
+    { kind: 'proficiency', id: 'tool3', label: "Artisan's tools (3rd)", from: 'artisan-tool' },
   ] },
   { key: 'healer', name: 'Healer', text: "Battle Medic: if you have a Healer's Kit, you can expend one use as a Utilize action to let a creature within 5 feet expend one Hit Die, rolling it + your Proficiency Bonus, regaining that many Hit Points. Healing Rerolls: whenever you roll a die to determine Hit Points restored with the Medicine skill or a spell, you can reroll a 1 (must use the new roll)." },
   { key: 'lucky', name: 'Lucky', text: 'Luck Points: you have Luck Points equal to your Proficiency Bonus, regained on a Long Rest. Advantage: spend 1 Luck Point to give yourself Advantage on a D20 Test. Disadvantage: when a creature rolls a d20 for an attack against you, spend 1 Luck Point to impose Disadvantage on that roll.' },
-  { key: 'magic-initiate-cleric', name: 'Magic Initiate (Cleric)', text: 'You learn two cantrips and one level 1 spell from the Cleric spell list (the level 1 spell is always prepared; castable once per Long Rest without a slot, or with slots). Spellcasting ability: Intelligence, Wisdom, or Charisma. On level up you can replace one of the cantrips.' },
-  { key: 'magic-initiate-druid', name: 'Magic Initiate (Druid)', text: 'You learn two cantrips and one level 1 spell from the Druid spell list (the level 1 spell is always prepared; castable once per Long Rest without a slot, or with slots). Spellcasting ability: Intelligence, Wisdom, or Charisma. On level up you can replace one of the cantrips.' },
-  { key: 'magic-initiate-wizard', name: 'Magic Initiate (Wizard)', text: 'You learn two cantrips and one level 1 spell from the Wizard spell list (the level 1 spell is always prepared; castable once per Long Rest without a slot, or with slots). Spellcasting ability: Intelligence, Wisdom, or Charisma. On level up you can replace one of the cantrips.' },
+  { key: 'magic-initiate-cleric', name: 'Magic Initiate (Cleric)', text: 'You learn two cantrips and one level 1 spell from the Cleric spell list (the level 1 spell is always prepared; castable once per Long Rest without a slot, or with slots). Spellcasting ability: Intelligence, Wisdom, or Charisma. On level up you can replace one of the cantrips.', picks: [
+    { kind: 'spell', id: 'cantrip1', label: 'Cleric cantrip (1st)', list: 'cleric', level: 0 },
+    { kind: 'spell', id: 'cantrip2', label: 'Cleric cantrip (2nd)', list: 'cleric', level: 0 },
+    { kind: 'spell', id: 'spell1', label: 'Cleric level 1 spell', list: 'cleric', level: 1 },
+  ] },
+  { key: 'magic-initiate-druid', name: 'Magic Initiate (Druid)', text: 'You learn two cantrips and one level 1 spell from the Druid spell list (the level 1 spell is always prepared; castable once per Long Rest without a slot, or with slots). Spellcasting ability: Intelligence, Wisdom, or Charisma. On level up you can replace one of the cantrips.', picks: [
+    { kind: 'spell', id: 'cantrip1', label: 'Druid cantrip (1st)', list: 'druid', level: 0 },
+    { kind: 'spell', id: 'cantrip2', label: 'Druid cantrip (2nd)', list: 'druid', level: 0 },
+    { kind: 'spell', id: 'spell1', label: 'Druid level 1 spell', list: 'druid', level: 1 },
+  ] },
+  { key: 'magic-initiate-wizard', name: 'Magic Initiate (Wizard)', text: 'You learn two cantrips and one level 1 spell from the Wizard spell list (the level 1 spell is always prepared; castable once per Long Rest without a slot, or with slots). Spellcasting ability: Intelligence, Wisdom, or Charisma. On level up you can replace one of the cantrips.', picks: [
+    { kind: 'spell', id: 'cantrip1', label: 'Wizard cantrip (1st)', list: 'wizard', level: 0 },
+    { kind: 'spell', id: 'cantrip2', label: 'Wizard cantrip (2nd)', list: 'wizard', level: 0 },
+    { kind: 'spell', id: 'spell1', label: 'Wizard level 1 spell', list: 'wizard', level: 1 },
+  ] },
   { key: 'musician', name: 'Musician', text: 'Instrument Training: gain proficiency with three Musical Instruments of your choice. Encouraging Song: as you finish a Short or Long Rest, you can play a song to give Heroic Inspiration to allies (up to your Proficiency Bonus) who hear it.', picks: [
-    { id: 'inst1', label: 'Instrument (1st)', from: 'instrument' },
-    { id: 'inst2', label: 'Instrument (2nd)', from: 'instrument' },
-    { id: 'inst3', label: 'Instrument (3rd)', from: 'instrument' },
+    { kind: 'proficiency', id: 'inst1', label: 'Instrument (1st)', from: 'instrument' },
+    { kind: 'proficiency', id: 'inst2', label: 'Instrument (2nd)', from: 'instrument' },
+    { kind: 'proficiency', id: 'inst3', label: 'Instrument (3rd)', from: 'instrument' },
   ] },
   { key: 'savage-attacker', name: 'Savage Attacker', text: "Once per turn when you hit a target with a weapon, you can roll the weapon's damage dice twice and use either roll against the target." },
   { key: 'skilled', name: 'Skilled', text: 'You gain proficiency in any combination of three skills or tools of your choice. Repeatable: you can take this feat more than once.', picks: [
-    { id: 'p1', label: 'Skill or tool (1st)', from: 'skill-or-tool' },
-    { id: 'p2', label: 'Skill or tool (2nd)', from: 'skill-or-tool' },
-    { id: 'p3', label: 'Skill or tool (3rd)', from: 'skill-or-tool' },
+    { kind: 'proficiency', id: 'p1', label: 'Skill or tool (1st)', from: 'skill-or-tool' },
+    { kind: 'proficiency', id: 'p2', label: 'Skill or tool (2nd)', from: 'skill-or-tool' },
+    { kind: 'proficiency', id: 'p3', label: 'Skill or tool (3rd)', from: 'skill-or-tool' },
   ] },
   { key: 'tavern-brawler', name: 'Tavern Brawler', text: 'Enhanced Unarmed Strike: your Unarmed Strike deals 1d4 + STR bludgeoning damage. Damage Rerolls: reroll 1s on Unarmed Strike damage. Improvised Weaponry: proficiency with improvised weapons. Push: once per turn when you hit with an Unarmed Strike, you can push the target 5 feet away.' },
   { key: 'tough', name: 'Tough', text: 'Your Hit Point maximum increases by an amount equal to twice your character level when you gain this feat. Whenever you gain a level thereafter, it increases by an additional 2.' },

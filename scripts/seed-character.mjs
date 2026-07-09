@@ -42,10 +42,14 @@ export const sampleCharacter = {
   resourceUses: {},
   heroicInspiration: true,
   inventory: [
-    { id: 'i1', name: "Scholar's Pack", qty: 1, weight: 10 },
-    { id: 'i2', name: 'Rapier', qty: 1, weight: 2, equipped: true },
-    { id: 'i3', name: 'Alchemist\'s Supplies', qty: 1, weight: 8 },
-    { id: 'i4', name: 'Potion of Healing', qty: 3, weight: 0.5 },
+    { id: 'i2', name: 'Rapier', qty: 1, weight: 2, equipped: true, category: 'weapon' },
+    { id: 'i5', name: 'Light Crossbow', qty: 1, weight: 5, category: 'weapon' },
+    { id: 'i6', name: 'Studded Leather', qty: 1, weight: 13, equipped: true, category: 'armor' },
+    { id: 'i1', name: "Scholar's Pack", qty: 1, weight: 10, category: 'gear', notes: 'bedroll, rations, ink, 10 parchment' },
+    { id: 'i7', name: 'Bolts', qty: 20, weight: 1.5, category: 'gear' },
+    { id: 'i3', name: "Alchemist's Supplies", qty: 1, weight: 8, category: 'tool' },
+    { id: 'i4', name: 'Potion of Healing', qty: 3, weight: 0.5, category: 'consumable', notes: 'regain 2d4+2 HP' },
+    { id: 'i8', name: 'Lens of the Archivist', qty: 1, weight: 0.5, category: 'magic', attuned: true, requiresAttunement: true, notes: 'advantage to decipher text' },
   ],
   attacks: [
     { id: 'a1', name: 'Rapier', ability: 'dex', proficient: true, damage: '1d8', damageType: 'piercing', weaponKey: 'rapier' },

@@ -1,21 +1,14 @@
 import { useStore } from '../state/store'
-import { derive, characterTools, characterLanguages } from '../rules/derive'
+import { derive, characterTools, characterLanguages, characterSpells } from '../rules/derive'
 import { getSpecies } from '../data/species'
 import { getBackground, getOriginFeat } from '../data/backgrounds'
 import { getDiscipline, getPursuit, SAVANT_FEATURES, SCHOLARLY_FEATS } from '../data/savant'
 import { NoCharacter, PageHead } from './shared'
 import CharacterBand from './CharacterBand'
+import FeatureRow from './FeatureRow'
 
-function Feature({ name, meta, text, open }: { name: string; meta: string; text: string; open?: boolean }) {
-  return (
-    <details className="feature" open={open}>
-      <summary>
-        <span className="f-name">{name}</span>
-        <span className="f-meta">{meta}</span>
-      </summary>
-      <div className="f-text">{text}</div>
-    </details>
-  )
+function Feature({ name, meta, text }: { name: string; meta: string; text: string; open?: boolean }) {
+  return <FeatureRow name={name} meta={meta} text={text} />
 }
 
 export default function Features() {
@@ -127,6 +120,12 @@ export default function Features() {
             <div className="row">{characterLanguages(c).map((l) => <span key={l} className="chip">{l}</span>)}</div>
           </div>
         </div>
+        {characterSpells(c).length > 0 && (
+          <>
+            <h3>Spells &amp; cantrips</h3>
+            <div className="row">{characterSpells(c).map((s) => <span key={s} className="chip">{s}</span>)}</div>
+          </>
+        )}
       </div>
 
       {background && (

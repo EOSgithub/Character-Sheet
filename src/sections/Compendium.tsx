@@ -5,6 +5,7 @@ import {
 } from '../data/savant'
 import { WEAPONS, MASTERIES } from '../data/weapons'
 import { PageHead } from './shared'
+import FeatureRow from './FeatureRow'
 
 type Entry = { key: string; label: string; group: string }
 
@@ -20,15 +21,7 @@ const ENTRIES: Entry[] = [
 ]
 
 function FeatureBlock({ name, meta, text }: { name: string; meta?: string; text: string }) {
-  return (
-    <details className="feature" open>
-      <summary>
-        <span className="f-name">{name}</span>
-        {meta && <span className="f-meta">{meta}</span>}
-      </summary>
-      <div className="f-text">{text}</div>
-    </details>
-  )
+  return <FeatureRow name={name} meta={meta} text={text} />
 }
 
 export default function Compendium() {

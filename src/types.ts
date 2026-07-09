@@ -63,10 +63,30 @@ export const ARMORS: ArmorDef[] = [
   { key: 'half-plate', name: 'Half Plate', category: 'medium', baseAC: 15, maxAbilityBonus: 2, stealthDisadvantage: true },
 ]
 
+export type ItemCategory = 'weapon' | 'armor' | 'gear' | 'tool' | 'consumable' | 'treasure' | 'magic'
+
+export interface ItemCategoryDef {
+  key: ItemCategory
+  label: string
+  /** plural section heading */
+  group: string
+}
+
+export const ITEM_CATEGORIES: ItemCategoryDef[] = [
+  { key: 'weapon', label: 'Weapon', group: 'Weapons' },
+  { key: 'armor', label: 'Armor', group: 'Armor & shields' },
+  { key: 'gear', label: 'Gear', group: 'Adventuring gear' },
+  { key: 'tool', label: 'Tool', group: 'Tools & kits' },
+  { key: 'consumable', label: 'Consumable', group: 'Consumables' },
+  { key: 'magic', label: 'Magic item', group: 'Magic items' },
+  { key: 'treasure', label: 'Valuable', group: 'Valuables' },
+]
+
 export interface InventoryItem {
   id: string
   name: string
   qty: number
+  category?: ItemCategory
   weight?: number
   notes?: string
   equipped?: boolean
@@ -117,6 +137,10 @@ export interface LevelChoices {
   grantedTools?: string[]
   /** languages learned via open picks resolved at this level */
   grantedLanguages?: string[]
+  /** spells learned via a feat (Magic Initiate) at this level */
+  grantedSpells?: string[]
+  /** ability increases from a feat taken at this level (half-feats) */
+  featAbilities?: Partial<Record<AbilityKey, number>>
   /** HP rolled/taken for this level (levels 2+); level 1 is fixed */
   hp?: number
 }
@@ -164,6 +188,8 @@ export interface Character {
   expertise: string[]
   toolProficiencies: string[]
   languages: string[]
+  /** spells known from creation-time feats (Magic Initiate) */
+  knownSpells?: string[]
   /** choices recorded per level, index = level */
   choices: Record<number, LevelChoices>
   // -- live state --

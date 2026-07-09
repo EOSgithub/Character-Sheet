@@ -9,15 +9,17 @@ import { derive, allPursuits, fmt } from '../rules/derive'
 import { gainsForLevel, pendingLevels } from '../rules/levelup'
 import { DISCIPLINES, PURSUITS, SCHOLARLY_FEATS, getDiscipline, getPursuit, SAVANT_TABLE } from '../data/savant'
 import { ORIGIN_FEATS } from '../data/backgrounds'
-import { bucketPicks } from '../data/lists'
-import type { ChoicePick } from '../data/lists'
+import { routeFeatChoices } from '../data/lists'
+import type { FeatChoice } from '../data/lists'
 import { NoCharacter, PageHead } from './shared'
-import { PickRows } from './picks'
+import { PickRows, FeatChoiceRows } from './picks'
+
+type CatalogFeat = { key: string; name: string; text: string; group: string; picks?: FeatChoice[]; grantsAbility?: Partial<Record<AbilityKey, number>> }
 
 /** Feats a player can pick at an ASI level, with any open sub-picks. */
-const FEAT_CATALOG: { key: string; name: string; text: string; group: string; picks?: ChoicePick[] }[] = [
-  ...SCHOLARLY_FEATS.map((f) => ({ key: f.key, name: f.name, text: f.text, group: 'Scholarly feats' })),
-  ...ORIGIN_FEATS.map((f) => ({ key: `origin-${f.key}`, name: f.name, text: f.text, group: 'Origin feats', picks: f.picks })),
+const FEAT_CATALOG: CatalogFeat[] = [
+  ...SCHOLARLY_FEATS.map((f) => ({ key: f.key, name: f.name, text: f.text, group: 'Scholarly feats', picks: f.picks, grantsAbility: f.grantsAbility })),
+  ...ORIGIN_FEATS.map((f) => ({ key: `origin-${f.key}`, name: f.name, text: f.text, group: 'Origin feats', picks: f.picks, grantsAbility: f.grantsAbility })),
 ]
 
 export default function LevelUp() {
@@ -135,11 +137,20 @@ function LevelForm({ level, onCancelLevel }: { level: number; onCancelLevel?: ()
     }
     if (optionPicksDue > 0) ch.disciplineOptions = options
 
-    // Open picks resolved this level (pursuit + feat "of your choice") → granted proficiencies.
-    const picked = bucketPicks([...Object.values(pursuitPicks), ...Object.values(featPicks)])
+    // Open picks resolved this level (pursuit + feat "of your choice").
+    const picked = routeFeatChoices([...Object.values(pursuitPicks), ...Object.values(featPicks)])
     if (picked.skills.length) ch.grantedSkills = picked.skills
     if (picked.tools.length) ch.grantedTools = picked.tools
     if (picked.languages.length) ch.grantedLanguages = picked.languages
+    if (picked.spells.length) ch.grantedSpells = picked.spells
+    // an extra Pursuit granted by a feat (Scholar of Lore) joins this level's pursuits
+    if (picked.pursuits.length) ch.pursuits = [...(ch.pursuits ?? []), ...picked.pursuits]
+    // half-feat ability increases: fixed grant + the chosen one
+    if (asiMode === 'feat' && selectedFeat) {
+      const abil: Partial<Record<AbilityKey, number>> = { ...selectedFeat.grantsAbility }
+      for (const a of picked.abilities) abil[a] = (abil[a] ?? 0) + 1
+      if (Object.keys(abil).length) ch.featAbilities = abil
+    }
     updateCharacter(c.id, (cur) => {
       const newChoices = { ...cur.choices, [level]: ch }
       // current HP grows by the HP gained at this level (derive() already
@@ -358,7 +369,14 @@ function LevelForm({ level, onCancelLevel }: { level: number; onCancelLevel?: ()
                 <div className="info-panel">
                   <h4>{selectedFeat.name}</h4>
                   <div className="trait"><div className="t-text">{selectedFeat.text}</div></div>
-                  {selectedFeat.picks && <PickRows picks={selectedFeat.picks} values={featPicks} onChange={(id, v) => setFeatPicks({ ...featPicks, [id]: v })} />}
+                  {selectedFeat.picks && (
+                    <FeatChoiceRows
+                      choices={selectedFeat.picks}
+                      values={featPicks}
+                      onChange={(id, v) => setFeatPicks({ ...featPicks, [id]: v })}
+                      pursuitOptions={availablePursuits.map((p) => ({ key: p.key, name: p.name }))}
+                    />
+                  )}
                 </div>
               )}
 

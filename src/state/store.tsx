@@ -29,6 +29,7 @@ function migrate(c: Character): Character {
     resourceUses: c.resourceUses ?? {},
     heroicInspiration: c.heroicInspiration ?? false,
     speciesChoices: c.speciesChoices ?? {},
+    knownSpells: c.knownSpells ?? [],
   }
 }
 

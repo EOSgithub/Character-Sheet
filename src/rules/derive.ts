@@ -43,6 +43,8 @@ export function finalAbilities(c: Character): Record<AbilityKey, number> {
     for (let lv = 1; lv <= c.level; lv++) {
       const asi = c.choices[lv]?.asi
       if (asi && asi[k]) v += asi[k]!
+      const fa = c.choices[lv]?.featAbilities
+      if (fa && fa[k]) v += fa[k]!
     }
     if (k === 'int' && c.level >= 20) v = Math.min(24, v + 4)
     else v = Math.min(20, v)
@@ -79,6 +81,13 @@ export function characterTools(c: Character): string[] {
 export function characterLanguages(c: Character): string[] {
   const set = new Set<string>(c.languages)
   for (const ch of Object.values(c.choices)) for (const l of ch.grantedLanguages ?? []) set.add(l)
+  return [...set]
+}
+
+/** Spells known via Magic Initiate feats (creation + level-up). */
+export function characterSpells(c: Character): string[] {
+  const set = new Set<string>(c.knownSpells ?? [])
+  for (const ch of Object.values(c.choices)) for (const s of ch.grantedSpells ?? []) set.add(s)
   return [...set]
 }
 
