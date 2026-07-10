@@ -2,8 +2,7 @@ import { useMemo, useState } from 'react'
 import { useStore, newId } from '../state/store'
 import type { InventoryItem, ItemCategory } from '../types'
 import { ITEM_CATEGORIES } from '../types'
-import { NoCharacter, PageHead, Stepper } from './shared'
-import CharacterBand from './CharacterBand'
+import { Stepper } from './shared'
 import Modal from './Modal'
 
 const ATTUNEMENT_SLOTS = 3
@@ -16,7 +15,7 @@ export default function Inventory() {
   const [filter, setFilter] = useState<ItemCategory | 'all'>('all')
   const [search, setSearch] = useState('')
 
-  if (!active) return <><PageHead title="Inventory" /><NoCharacter /></>
+  if (!active) return null
   const c = active
 
   const attunedCount = c.inventory.filter((i) => i.attuned).length
@@ -53,7 +52,6 @@ export default function Inventory() {
 
   return (
     <>
-      <CharacterBand section="Inventory" />
 
       {/* summary */}
       <div className="inv-summary">

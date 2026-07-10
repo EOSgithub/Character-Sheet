@@ -3,8 +3,6 @@ import { derive, characterTools, characterLanguages, characterSpells } from '../
 import { getSpecies } from '../data/species'
 import { getBackground, getOriginFeat } from '../data/backgrounds'
 import { getDiscipline, getPursuit, SAVANT_FEATURES, SCHOLARLY_FEATS } from '../data/savant'
-import { NoCharacter, PageHead } from './shared'
-import CharacterBand from './CharacterBand'
 import FeatureRow from './FeatureRow'
 
 function Feature({ name, meta, text }: { name: string; meta: string; text: string; open?: boolean }) {
@@ -13,7 +11,7 @@ function Feature({ name, meta, text }: { name: string; meta: string; text: strin
 
 export default function Features() {
   const { active } = useStore()
-  if (!active) return <><PageHead title="Features & Traits" /><NoCharacter /></>
+  if (!active) return null
   const c = active
   const d = derive(c)
   const species = getSpecies(c.speciesKey)
@@ -48,8 +46,6 @@ export default function Features() {
 
   return (
     <>
-      <CharacterBand section="Features & Traits" />
-
       <div className="card">
         <h2>Savant class features</h2>
         {classFeatures.map((f) => (

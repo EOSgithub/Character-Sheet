@@ -1,18 +1,14 @@
 import { useStore } from '../state/store'
 import { derive, fmt } from '../rules/derive'
 import { ABILITY_KEYS, ABILITY_NAMES, SKILLS } from '../types'
-import { NoCharacter, PageHead } from './shared'
-import CharacterBand from './CharacterBand'
 
 export default function Abilities() {
   const { active } = useStore()
-  if (!active) return <><PageHead title="Abilities, Saves & Skills" /><NoCharacter /></>
+  if (!active) return null
   const d = derive(active)
 
   return (
     <>
-      <CharacterBand section="Abilities & Skills" />
-
       <div className="grid cols-3" style={{ gridTemplateColumns: 'repeat(6, 1fr)', gap: 10 }}>
         {ABILITY_KEYS.map((k) => (
           <div className="stat-tile ability" key={k}>

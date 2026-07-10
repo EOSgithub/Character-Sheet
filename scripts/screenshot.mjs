@@ -1,7 +1,8 @@
 // In-app screenshot taker for design review.
 //
-// Seeds a sample character into localStorage, then captures every page at
-// desktop and mobile widths. Output lands in ./screenshots (gitignored).
+// Seeds a sample character into localStorage, then captures every page.
+// The PRIMARY design target is iPad landscape (~1180×820) — that is the
+// device the app is played on. Output lands in ./screenshots (gitignored).
 //
 // Usage:
 //   npm run dev            # in one terminal (or let this script find it)
@@ -10,7 +11,7 @@
 // Options (env vars):
 //   URL=http://localhost:5173/Character-Sheet/   base app URL
 //   ONLY=battle,home                             comma list of routes to shoot
-//   VIEWS=desktop,mobile                         which widths to capture
+//   VIEWS=ipad,mobile,desktop                    which viewports to capture
 //   THEME=light|dark                             color-scheme to emulate
 //   OUT=screenshots                              output directory
 //
@@ -33,21 +34,22 @@ const THEME = process.env.THEME === 'dark' ? 'dark' : 'light'
 // route name -> hash path (HashRouter). Order = capture order.
 const ROUTES = {
   home: '/',
-  abilities: '/abilities',
-  battle: '/battle',
-  features: '/features',
-  inventory: '/inventory',
+  abilities: '/sheet/abilities',
+  battle: '/sheet/battle',
+  features: '/sheet/features',
+  inventory: '/sheet/inventory',
   compendium: '/compendium',
   wizard: '/new',
 }
 
 const VIEWPORTS = {
+  ipad: { width: 1180, height: 820 },   // iPad landscape — the real play surface
   desktop: { width: 1280, height: 900 },
-  mobile: { width: 390, height: 844 },
+  mobile: { width: 390, height: 844 },  // phone, secondary stress test
 }
 
 const only = (process.env.ONLY ?? '').split(',').map((s) => s.trim()).filter(Boolean)
-const views = (process.env.VIEWS ?? 'desktop,mobile').split(',').map((s) => s.trim()).filter(Boolean)
+const views = (process.env.VIEWS ?? 'ipad,mobile').split(',').map((s) => s.trim()).filter(Boolean)
 const routeNames = only.length ? only.filter((r) => r in ROUTES) : Object.keys(ROUTES)
 
 function url(hashPath) {

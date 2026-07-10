@@ -84,7 +84,7 @@ export default function Home() {
                     <td>
                       <button
                         style={{ fontWeight: isActive ? 700 : 500, color: isActive ? 'var(--prussian)' : undefined, minHeight: 36 }}
-                        onClick={() => setActive(c.id)}
+                        onClick={() => { setActive(c.id); navigate('/sheet') }}
                       >
                         {c.name} {isActive && <span className="chip on" style={{ fontSize: 11, padding: '1px 8px', marginLeft: 6 }}>active</span>}
                       </button>

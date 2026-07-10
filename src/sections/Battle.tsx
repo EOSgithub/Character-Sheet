@@ -6,8 +6,8 @@ import type { Attack } from '../types'
 import { newId } from '../state/store'
 import { deriveResources, applyShortRest, applyLongRest } from '../rules/resources'
 import { WEAPONS, MASTERIES, getWeapon, savantProficientWith, defaultAbility } from '../data/weapons'
-import { NoCharacter, PageHead, Stepper } from './shared'
-import CharacterBand, { Reticle } from './CharacterBand'
+import { Stepper } from './shared'
+import { Reticle } from './CharacterBand'
 import FeatureRow from './FeatureRow'
 import Modal from './Modal'
 import type { AbilityKey } from '../types'
@@ -15,7 +15,7 @@ import type { AbilityKey } from '../types'
 export default function Battle() {
   const { active, updateCharacter } = useStore()
   const [dmg, setDmg] = useState('')
-  if (!active) return <><PageHead title="Battle Mode" /><NoCharacter /></>
+  if (!active) return null
   const d = derive(active)
   const c = active
 
@@ -41,7 +41,6 @@ export default function Battle() {
 
   return (
     <>
-      <CharacterBand section="Battle Mode" />
 
       <div className="grid cols-2">
         {/* ------------------------------ HP ------------------------------- */}

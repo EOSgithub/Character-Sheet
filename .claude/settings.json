@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build)",
+      "Bash(npm run build:*)",
+      "Bash(npm run shots)",
+      "Bash(npm run shots:*)",
+      "Bash(ONLY=* npm run shots)",
+      "Bash(VIEWS=* npm run shots)",
+      "Bash(THEME=* npm run shots)",
+      "Bash(node scripts/screenshot.mjs)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "PowerShell(npm run build)",
+      "PowerShell(npm run shots)",
+      "PowerShell(git status:*)",
+      "PowerShell(git diff:*)",
+      "PowerShell(git log:*)"
+    ]
+  }
+}
