@@ -1,6 +1,7 @@
 import { useStore } from '../state/store'
 import { derive, fmt } from '../rules/derive'
 import { ABILITY_KEYS, ABILITY_NAMES, SKILLS } from '../types'
+import { TermLink } from './rules'
 
 export default function Abilities() {
   const { active } = useStore()
@@ -43,8 +44,8 @@ export default function Abilities() {
             </tbody>
           </table>
           <p className="small muted mt">
-            Peerless Insights (5th+): add one roll of your Intellect Die to INT, WIS, and CHA saving throws while not incapacitated.
-            {active.level >= 14 && ' Unyielding Will (14th): advantage on saves against charmed and frightened.'}
+            <TermLink name="Peerless Insights" /> (5th+): add one roll of your <TermLink name="Intellect Die" /> to INT, WIS, and CHA saving throws while not incapacitated.
+            {active.level >= 14 && <> <TermLink name="Unyielding Will" /> (14th): advantage on saves against <TermLink name="charmed">charmed</TermLink> and <TermLink name="frightened">frightened</TermLink>.</>}
           </p>
         </div>
 
@@ -83,7 +84,7 @@ export default function Abilities() {
                       }}
                     />
                   </td>
-                  <td style={{ fontWeight: prof ? 600 : 400 }}>{s.name}</td>
+                  <td style={{ fontWeight: prof ? 600 : 400 }}><TermLink name={s.name} /></td>
                   <td className="muted small">{s.ability.toUpperCase()}</td>
                   <td className="num right" style={{ fontSize: 18 }}>{fmt(d.skills[s.key])}</td>
                 </tr>

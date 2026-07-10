@@ -6,6 +6,7 @@ import {
 import { WEAPONS, MASTERIES } from '../data/weapons'
 import { PageHead } from './shared'
 import FeatureRow from './FeatureRow'
+import { useRules } from './rules'
 
 type Entry = { key: string; label: string; group: string }
 
@@ -26,6 +27,7 @@ function FeatureBlock({ name, meta, text }: { name: string; meta?: string; text:
 
 export default function Compendium() {
   const [current, setCurrent] = useState('class')
+  const { open } = useRules()
 
   let content: React.ReactNode = null
 
@@ -152,10 +154,14 @@ export default function Compendium() {
             <tbody>
               {WEAPONS.map((w) => (
                 <tr key={w.key}>
-                  <td style={{ fontWeight: 600 }}>{w.name}</td>
+                  <td style={{ fontWeight: 600 }}>
+                    <button className="term" onClick={() => open(`weapon:${w.key}`)}>{w.name}</button>
+                  </td>
                   <td className="small muted">{w.category}</td>
                   <td className="num">{w.damage} {w.damageType.slice(0, 1).toUpperCase()}</td>
-                  <td>{MASTERIES[w.mastery].name}</td>
+                  <td>
+                    <button className="term" onClick={() => open(`mastery:${w.mastery}`)}>{MASTERIES[w.mastery].name}</button>
+                  </td>
                   <td className="small muted">{w.properties.join(', ') || '—'}</td>
                 </tr>
               ))}

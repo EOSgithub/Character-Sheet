@@ -4,6 +4,26 @@ import type { AbilityKey, Character } from '../types'
 import { ABILITY_KEYS, ARMORS, SKILLS } from '../types'
 import { SAVANT_TABLE, DISCIPLINES, PURSUITS, getDiscipline } from '../data/savant'
 import { getSpecies } from '../data/species'
+import { getBackground, ORIGIN_FEATS } from '../data/backgrounds'
+
+/** Conditions that set Speed to 0 (2024 rules). */
+const SPEED_ZERO_CONDITIONS = ['grappled', 'restrained', 'paralyzed', 'petrified', 'stunned', 'unconscious'] as const
+
+/**
+ * Does the character have this Origin feat, from any source — their
+ * background, the Human "Versatile" trait, or taken at an ASI level?
+ * Used to wire feat text into the math (Tough → HP, Alert → initiative).
+ */
+export function hasOriginFeat(c: Character, featKey: string): boolean {
+  if (getBackground(c.backgroundKey)?.featKey === featKey) return true
+  if (c.speciesChoices?.['versatile'] === featKey) return true
+  const name = ORIGIN_FEATS.find((f) => f.key === featKey)?.name
+  if (!name) return false
+  for (let lv = 1; lv <= c.level; lv++) {
+    if (c.choices[lv]?.feat?.name === name) return true
+  }
+  return false
+}
 
 export function mod(score: number): number {
   return Math.floor((score - 10) / 2)
@@ -109,16 +129,24 @@ export function derive(c: Character): Derived {
   }
   const species = getSpecies(c.speciesKey)
   if (species?.key === 'dwarf') maxHP += c.level // Dwarven Toughness
+  if (hasOriginFeat(c, 'tough')) maxHP += 2 * c.level // Tough: +2 HP per level
 
   // AC: Predictive Defense lets INT replace DEX in light/medium armor or unarmored.
   const armor = ARMORS.find((a) => a.key === c.armor) ?? ARMORS[0]
   const abilityForAC = Math.max(mods.dex, mods.int)
-  const ac = armor.baseAC + Math.min(abilityForAC, armor.maxAbilityBonus) + (c.shield ? 2 : 0)
+  let ac = armor.baseAC + Math.min(abilityForAC, armor.maxAbilityBonus) + (c.shield ? 2 : 0)
+  // Doctoral Robes (attuned): unarmored AC becomes 15 + INT.
+  if (armor.key === 'none' && c.inventory.some((i) => i.attuned && /doctoral robes/i.test(i.name))) {
+    ac = Math.max(ac, 15 + mods.int + (c.shield ? 2 : 0))
+  }
 
-  // Initiative: DEX, +INT from Keen Awareness at 7.
-  const initiative = mods.dex + (c.level >= 7 ? mods.int : 0)
+  // Initiative: DEX, +INT from Keen Awareness at 7, +PB from the Alert feat.
+  const initiative = mods.dex + (c.level >= 7 ? mods.int : 0) + (hasOriginFeat(c, 'alert') ? pb : 0)
 
-  const speed = species?.key === 'elf' && c.speciesVariant === 'wood-elf' ? 35 : species?.speed ?? 30
+  // Speed: species base, −5 ft per exhaustion level; some conditions pin it to 0.
+  let speed = species?.key === 'elf' && c.speciesVariant === 'wood-elf' ? 35 : species?.speed ?? 30
+  speed = Math.max(0, speed - 5 * c.exhaustion)
+  if (SPEED_ZERO_CONDITIONS.some((k) => c.conditions.includes(k))) speed = 0
 
   // Saves: INT & WIS; +CHA at 14 (Unyielding Will).
   const saveProficiencies: AbilityKey[] = ['int', 'wis']

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 import { useStore } from '../state/store'
 import { derive, fmt } from '../rules/derive'
 import { ARMORS, CONDITIONS, FOCUS_CLUES } from '../types'
@@ -10,6 +11,8 @@ import { Stepper } from './shared'
 import { Reticle } from './CharacterBand'
 import FeatureRow from './FeatureRow'
 import Modal from './Modal'
+import { TermLink, useRules } from './rules'
+import { findEntryByName } from '../rules/lexicon'
 import type { AbilityKey } from '../types'
 
 export default function Battle() {
@@ -120,7 +123,7 @@ export default function Battle() {
               Shield (+2)
             </label>
           </div>
-          <p className="small muted mt">Predictive Defense: AC uses the better of DEX or INT in light/medium armor or unarmored.</p>
+          <p className="small muted mt"><TermLink name="Predictive Defense" />: AC uses the better of DEX or INT in light/medium armor or unarmored.</p>
           <div className="row mt">
             <button
               className={`chip${c.heroicInspiration ? ' on' : ''}`}
@@ -131,25 +134,9 @@ export default function Battle() {
             </button>
           </div>
           {d.reactions > 1 && (
-            <>
-              <hr className="rule" />
-              <div className="row">
-                <span className="eyebrow">Reactions this round</span>
-                <span className="row" style={{ gap: 6 }}>
-                  {Array.from({ length: d.reactions }, (_, i) => (
-                    <button
-                      key={i}
-                      className={`chip vermilion${c.reactionsUsed > i ? ' on' : ''}`}
-                      style={{ minHeight: 40 }}
-                      onClick={() => updateCharacter(c.id, { reactionsUsed: c.reactionsUsed > i ? i : i + 1 })}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-                </span>
-                <button className="btn small" onClick={() => updateCharacter(c.id, { reactionsUsed: 0 })}>New round</button>
-              </div>
-            </>
+            <p className="small muted" style={{ marginBottom: 0 }}>
+              <TermLink name="Swift Reflexes" />: {d.reactions} reactions per round, one per trigger.
+            </p>
           )}
         </div>
       </div>
@@ -167,16 +154,31 @@ export default function Battle() {
       <AttacksCard />
 
       {/* ---------------------------- conditions ---------------------------- */}
-      <div className="card mt">
-        <h2>Conditions</h2>
-        <div className="row">
-          {CONDITIONS.map((cond) => {
-            const on = c.conditions.includes(cond)
-            return (
+      <ConditionsCard />
+    </>
+  )
+}
+
+/** Condition toggles — the main area of each chip toggles the condition, the
+ *  trailing "i" opens its rules text. Active conditions and exhaustion feed
+ *  back into derived stats (e.g. Speed). */
+function ConditionsCard() {
+  const { active, updateCharacter } = useStore()
+  const { open } = useRules()
+  if (!active) return null
+  const c = active
+
+  return (
+    <div className="card mt">
+      <h2>Conditions</h2>
+      <div className="row">
+        {CONDITIONS.map((cond) => {
+          const on = c.conditions.includes(cond)
+          return (
+            <span key={cond} className={`chip vermilion split${on ? ' on' : ''}`} style={{ minHeight: 40 }}>
               <button
-                key={cond}
-                className={`chip vermilion${on ? ' on' : ''}`}
-                style={{ minHeight: 40, textTransform: 'capitalize' }}
+                className="chip-main"
+                style={{ textTransform: 'capitalize' }}
                 onClick={() =>
                   updateCharacter(c.id, {
                     conditions: on ? c.conditions.filter((x) => x !== cond) : [...c.conditions, cond],
@@ -185,15 +187,16 @@ export default function Battle() {
               >
                 {cond}
               </button>
-            )
-          })}
-          <span className="chip" style={{ minHeight: 40 }}>
-            Exhaustion
-            <Stepper value={c.exhaustion} onChange={(v) => updateCharacter(c.id, { exhaustion: v })} min={0} max={6} />
-          </span>
-        </div>
+              <button className="chip-info" aria-label={`Rules for ${cond}`} onClick={() => open(`condition:${cond}`)}>i</button>
+            </span>
+          )
+        })}
+        <span className="chip" style={{ minHeight: 40 }}>
+          <TermLink name="Exhaustion" />
+          <Stepper value={c.exhaustion} onChange={(v) => updateCharacter(c.id, { exhaustion: v })} min={0} max={6} />
+        </span>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -227,9 +230,9 @@ function RestCard() {
     }
   }
 
-  const shortRestHints: string[] = []
-  if (d.disciplineKey === 'culinarian' && c.level >= 3) shortRestHints.push('Student of Flavor: each spent Hit Die also heals +1 Intellect Die roll (add it to the roll you enter).')
-  if (d.disciplineKey === 'mentor' && c.level >= 6) shortRestHints.push('Soothing Presence: advantage on Hit Die rolls; allies gain temp HP equal to your Savant level.')
+  const shortRestHints: { key: string; node: ReactNode }[] = []
+  if (d.disciplineKey === 'culinarian' && c.level >= 3) shortRestHints.push({ key: 'flavor', node: <><TermLink name="Student of Flavor" />: each spent Hit Die also heals +1 Intellect Die roll (add it to the roll you enter).</> })
+  if (d.disciplineKey === 'mentor' && c.level >= 6) shortRestHints.push({ key: 'soothing', node: <><TermLink name="Soothing Presence" />: advantage on Hit Die rolls; allies gain temp HP equal to your Savant level.</> })
 
   return (
     <div className="card">
@@ -256,7 +259,7 @@ function RestCard() {
         </button>
       </div>
       <p className="small muted" style={{ marginBottom: 0 }}>Each die heals its roll {fmt(d.mods.con)} (CON).</p>
-      {shortRestHints.map((h) => <p key={h} className="small muted" style={{ marginBottom: 0 }}>{h}</p>)}
+      {shortRestHints.map((h) => <p key={h.key} className="small muted" style={{ marginBottom: 0 }}>{h.node}</p>)}
       <hr className="rule" />
       <div className="row">
         <button className="btn" onClick={finishShortRest}>Finish short rest</button>
@@ -293,10 +296,13 @@ function ResourcesCard() {
         <tbody>
           {defs.map((r) => {
             const used = Math.min(c.resourceUses[r.key] ?? 0, r.max)
+            const entry = findEntryByName(r.name)
             return (
               <tr key={r.key}>
                 <td>
-                  <div style={{ fontWeight: 600 }}>{r.name}</div>
+                  <div style={{ fontWeight: 600 }}>
+                    {entry ? <TermLink name={r.name}>{r.name}</TermLink> : r.name}
+                  </div>
                   <div className="small muted">{r.source} · per {r.recharge} rest</div>
                 </td>
                 <td className="right">
@@ -340,7 +346,7 @@ function FocusPanel() {
       <div className="focus-panel idle mt">
         <div className="row between">
           <div>
-            <div className="eyebrow row" style={{ gap: 7 }}><Reticle className="focus-reticle" /> Adroit Analysis</div>
+            <div className="eyebrow row" style={{ gap: 7 }}><Reticle className="focus-reticle" /> <TermLink name="Adroit Analysis">Adroit Analysis</TermLink></div>
             <strong>No Focus designated.</strong>{' '}
             <span className="muted small">Bonus action: analyze a creature you can see within 60 ft.</span>
           </div>
@@ -358,7 +364,7 @@ function FocusPanel() {
   return (
     <div className="focus-panel mt">
       <div className="row between">
-        <div className="eyebrow row" style={{ gap: 7, color: 'var(--prussian)' }}><Reticle className="focus-reticle" /> Adroit Analysis · Focus</div>
+        <div className="eyebrow row" style={{ gap: 7, color: 'var(--prussian)' }}><Reticle className="focus-reticle" /> <TermLink name="Adroit Analysis">Adroit Analysis</TermLink> · Focus</div>
         <button className="btn small" onClick={() => updateCharacter(c.id, { focus: { active: false, name: '', clues: [], notes: '' } })}>
           End Focus
         </button>

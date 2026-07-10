@@ -9,6 +9,7 @@ import Compendium from './sections/Compendium'
 import Wizard from './sections/Wizard'
 import LevelUp from './sections/LevelUp'
 import { Reticle } from './sections/CharacterBand'
+import { RulesPanelProvider } from './sections/rules'
 
 const ICONS = {
   home: <path d="M3 11.5 12 4l9 7.5M5.5 10v9h13v-9" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />,
@@ -27,6 +28,7 @@ function Tab({ to, icon, label, end }: { to: string; icon: keyof typeof ICONS; l
 
 export default function App() {
   return (
+    <RulesPanelProvider>
     <div className="shell">
       <aside className="rail">
         <div className="rail-brand">
@@ -58,5 +60,6 @@ export default function App() {
         </div>
       </main>
     </div>
+    </RulesPanelProvider>
   )
 }

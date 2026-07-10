@@ -29,10 +29,12 @@ a fraction of the features.
 **Direction the owner wants (confirmed 2026-07):**
 - An **Actions view**: one combat surface listing everything the character can
   do — attacks with to-hit/damage, feature uses, bonus actions, reactions.
-- **Readable descriptions everywhere**: tap any feature/item → full rules text
-  inline (modal/expand), without leaving the sheet.
-- **Fewer battle micro-trackers** — the reactions-per-round counter is the
-  canonical example of what to remove, not extend.
+  (Still to build.)
+- **Readable descriptions everywhere** — SHIPPED 2026-07 as the connected
+  rules system (lexicon + rules side panel, see Architecture). Extend it,
+  don't build parallel description UIs.
+- **Fewer battle micro-trackers** — the reactions-per-round counter was
+  removed (2026-07) as the canonical example; don't add similar widgets.
 - Keep: Compendium, Inventory (with weight/coins), Level-up flow.
 
 **Every UI decision is judged at iPad landscape width first.** Desktop and
@@ -79,7 +81,21 @@ displayed stat is a **pure derivation** of it.
 - **`src/data/`** — static game content: `savant.ts` (class table, 11
   disciplines, pursuits, feats — ~1000 lines), `species.ts`,
   `backgrounds.ts`, `weapons.ts` (2024 weapons + masteries), `spells.ts`,
-  `lists.ts`. Transcribed from `reference/*.txt` (the source texts).
+  `lists.ts`, `glossary.ts` (conditions, game terms, actions, weapon
+  properties, skills — the 2024 keywords rules text references).
+  Transcribed from `reference/*.txt` (the source texts).
+- **`src/rules/lexicon.ts`** — the connected-rules registry. Builds one
+  `Entry` map from ALL of `src/data` at module load (features, disciplines,
+  pursuits, feats, traits, weapons, masteries, armors, magic items, glossary)
+  plus the link index used to auto-link mentions inside rules text. Content
+  added to `src/data` registers automatically; per-name flags control link
+  matching (`matchCase`, `aliases`, `noLink`).
+- **`src/sections/rules.tsx`** — the rules UI: `RulesPanelProvider` (global
+  right-hand drawer with back-stack, mounted in `App`), `useRules().open(id |
+  {name, meta, text})`, `RulesText` (renders rules text with every recognised
+  term tappable), `TermLink` (inline link for UI labels). **All rules text
+  must render through `RulesText`/`FeatureRow`** so terms stay linked;
+  `.term`, `.info-dot`, and split `.chip`s are the shared affordances.
 - **`src/sections/`** — one component per route.
 
 ### Routing (`src/App.tsx`)

@@ -1218,3 +1218,164 @@ hr.rule { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
   color: var(--ink-soft);
   line-height: 1.55;
 }
+
+/* ==========================================================================
+   Connected rules — term links + the rules side panel
+   Every recognised game term in rules text is a tappable .term; entries open
+   in a right-hand drawer (bottom sheet on phones) with in-panel back-stack.
+   ========================================================================== */
+
+.term {
+  display: inline;
+  padding: 0;
+  color: var(--prussian);
+  font: inherit;
+  text-align: inherit;
+  text-decoration: underline dotted;
+  text-decoration-color: rgba(35, 80, 102, 0.5);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.12s, text-decoration-color 0.12s;
+}
+.term:hover { color: var(--prussian-600); text-decoration-style: solid; text-decoration-color: currentColor; }
+
+.rules-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 90; /* under .modal-scrim (100): editors stay on top */
+  background: rgba(16, 27, 33, 0.18);
+  animation: scrim-in 0.14s ease both;
+}
+
+.rules-drawer {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: min(430px, 94vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border-left: 1px solid var(--line-2);
+  box-shadow: -18px 0 44px -20px rgba(20, 33, 40, 0.4);
+  animation: drawer-in 0.22s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes drawer-in { from { transform: translateX(48px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.rules-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--card-2);
+}
+.rules-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+  min-width: 40px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid var(--line-2);
+  background: var(--card-2);
+  color: var(--graphite);
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.rules-nav:hover { color: var(--prussian); border-color: var(--prussian); }
+.rules-x { justify-content: center; padding: 0; }
+.rules-x:hover { background: var(--vermilion); border-color: var(--vermilion); color: #fff; }
+.rules-nav-spacer { width: 1px; }
+
+.rules-body { padding: 16px 20px 28px; overflow-y: auto; }
+.rules-title { font-family: var(--font-display); font-size: 23px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+.rules-meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-top: 4px;
+}
+
+.rules-prose { line-height: 1.62; color: var(--ink-soft); font-size: 15px; }
+.rules-prose p { margin: 10px 0 0; }
+.rules-prose ul { margin: 8px 0 0; padding-left: 20px; }
+.rules-prose li { margin-top: 6px; }
+.rules-prose li::marker { color: var(--brass); }
+
+@media (max-width: 620px) {
+  .rules-drawer {
+    top: auto; left: 0; right: 0;
+    width: 100%;
+    max-height: 78vh;
+    border-left: none;
+    border-top: 1px solid var(--line-2);
+    border-radius: 16px 16px 0 0;
+  }
+  @keyframes drawer-in { from { transform: translateY(28px); opacity: 0; } to { transform: none; opacity: 1; } }
+}
+
+/* split chip: main area toggles, trailing "i" opens the rules entry */
+.chip.split { padding: 0; gap: 0; overflow: hidden; }
+.chip.split .chip-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: stretch;
+  padding: 5px 10px 5px 13px;
+  font: inherit;
+  color: inherit;
+  text-transform: inherit;
+}
+.chip.split .chip-info {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: 32px;
+  border-left: 1px solid var(--line-2);
+  color: var(--faint);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13.5px;
+  transition: background 0.12s, color 0.12s;
+}
+.chip.split .chip-info:hover { color: var(--prussian); background: rgba(35, 80, 102, 0.06); }
+.chip.on.split .chip-info { border-left-color: rgba(255, 255, 255, 0.35); color: rgba(255, 255, 255, 0.85); }
+.chip.on.split .chip-info:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+/* small circular "i" affordance on list rows (inventory) */
+.info-dot {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line-2);
+  background: var(--card-2);
+  color: var(--graphite);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  transition: color 0.12s, border-color 0.12s;
+}
+.info-dot:hover { color: var(--prussian); border-color: var(--prussian); }
+
+/* inventory rows are a div so the edit button and info button can coexist */
+.inv-item .inv-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  text-align: left;
+  padding: 2px 0;
+}
+
+/* term links inside ledger tables keep ink colour — the dotted underline is
+   affordance enough; a column of blue would shout */
+.ledger .term { color: inherit; }
+.ledger .term:hover { color: var(--prussian); }

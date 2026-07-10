@@ -4,6 +4,8 @@ import type { InventoryItem, ItemCategory } from '../types'
 import { ITEM_CATEGORIES } from '../types'
 import { Stepper } from './shared'
 import Modal from './Modal'
+import { useRules } from './rules'
+import { findEntryByName } from '../rules/lexicon'
 
 const ATTUNEMENT_SLOTS = 3
 const catLabel = (k?: ItemCategory) => ITEM_CATEGORIES.find((c) => c.key === k)?.label ?? 'Gear'
@@ -11,6 +13,7 @@ const catGroup = (k?: ItemCategory) => ITEM_CATEGORIES.find((c) => c.key === k)?
 
 export default function Inventory() {
   const { active, updateCharacter } = useStore()
+  const { open } = useRules()
   const [editing, setEditing] = useState<InventoryItem | 'new' | null>(null)
   const [filter, setFilter] = useState<ItemCategory | 'all'>('all')
   const [search, setSearch] = useState('')
@@ -119,24 +122,32 @@ export default function Inventory() {
                   <h3>{group}</h3>
                   <span className="count">{items.length}</span>
                 </div>
-                {items.map((i) => (
-                  <button key={i.id} className="inv-item" onClick={() => setEditing(i)}>
-                    <span className="qty">{i.qty > 1 ? `×${i.qty}` : ''}</span>
-                    <span className="body">
-                      <span className="nm">
-                        {i.name}
-                        {i.equipped && <span className="tag equipped">Equipped</span>}
-                        {i.attuned && <span className="tag attuned">Attuned</span>}
-                      </span>
-                      {(i.notes || i.weight) && (
-                        <span className="sub">
-                          {i.notes}{i.notes && i.weight ? ' · ' : ''}{i.weight ? `${i.weight} lb` : ''}
+                {items.map((i) => {
+                  const entry = findEntryByName(i.name)
+                  return (
+                    <div key={i.id} className="inv-item">
+                      <button className="inv-main" onClick={() => setEditing(i)}>
+                        <span className="qty">{i.qty > 1 ? `×${i.qty}` : ''}</span>
+                        <span className="body">
+                          <span className="nm">
+                            {i.name}
+                            {i.equipped && <span className="tag equipped">Equipped</span>}
+                            {i.attuned && <span className="tag attuned">Attuned</span>}
+                          </span>
+                          {(i.notes || i.weight) && (
+                            <span className="sub">
+                              {i.notes}{i.notes && i.weight ? ' · ' : ''}{i.weight ? `${i.weight} lb` : ''}
+                            </span>
+                          )}
                         </span>
+                        <span className="marks"><span className="tag">{catLabel(i.category)}</span></span>
+                      </button>
+                      {entry && (
+                        <button className="info-dot" aria-label={`Rules for ${i.name}`} onClick={() => open(entry.id)}>i</button>
                       )}
-                    </span>
-                    <span className="marks"><span className="tag">{catLabel(i.category)}</span></span>
-                  </button>
-                ))}
+                    </div>
+                  )
+                })}
               </div>
             ))}
           </>
