@@ -89,7 +89,9 @@ displayed stat is a **pure derivation** of it.
   pursuits, feats, traits, weapons, masteries, armors, magic items, glossary)
   plus the link index used to auto-link mentions inside rules text. Content
   added to `src/data` registers automatically; per-name flags control link
-  matching (`matchCase`, `aliases`, `noLink`).
+  matching (`matchCase`, `aliases`, `noLink`). **Use the connected-rules
+  skill** when touching content, glossary terms, term links, or `derive()`
+  effects — it holds the id conventions and the matching gotchas.
 - **`src/sections/rules.tsx`** — the rules UI: `RulesPanelProvider` (global
   right-hand drawer with back-stack, mounted in `App`), `useRules().open(id |
   {name, meta, text})`, `RulesText` (renders rules text with every recognised
@@ -107,6 +109,12 @@ plus a **subtab segmented control** (Abilities · Battle · Features ·
 Inventory) whose panes render through `<Outlet />` at
 `/sheet/abilities|battle|features|inventory`. Rail icons are inline SVG
 `path`s in the `ICONS` map in `App.tsx`.
+
+The **band owns the vitals**: current HP and temp HP are edited inline in
+the HP gauge (the human does the arithmetic — no damage/heal calculators),
+and the moon button opens `RestModal` (short/long rests, hit-dice healing).
+Battle shows a death-saves strip only while HP is 0. Don't reintroduce HP
+or rest cards on pages.
 
 Sheet subtab components (`Abilities.tsx`, `Battle.tsx`, `Features.tsx`,
 `Inventory.tsx`) assume the parent already handled the no-character case and
@@ -145,7 +153,10 @@ only. Standalone pages (Home, Compendium, Wizard) keep the
 1. `npm run build` — must pass (this is the only typecheck).
 2. If anything visible changed: `npm run shots` (dev server running), then
    **read the iPad PNGs** and check layout, spacing, and that game numbers
-   render in mono. Use `ONLY=`/`VIEWS=` to keep iteration fast.
+   render in mono. Use `ONLY=`/`VIEWS=` to keep iteration fast. State that
+   needs clicks (rules panel, modals) → "Interaction shots" in the
+   screenshot-app skill.
+   For rules-accuracy review of content changes, run the rules-checker agent.
 3. For store/types changes: bump-test an old save — `migrate()` must backfill
    every new field (an old character JSON imported via Home must not crash).
 

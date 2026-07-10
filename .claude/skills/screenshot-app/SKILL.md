@@ -40,6 +40,36 @@ URL=http://localhost:5173/Character-Sheet/ npm run shots
 
 When iterating on one page, use `ONLY=` + `VIEWS=ipad` to keep runs fast.
 
+## Interaction shots (rules panel, modals, toggles)
+
+`npm run shots` only captures pages as loaded. To capture state that needs
+clicks (the rules side panel, a modal, toggled conditions), write a one-off
+Playwright script — **it must live inside the project** (e.g.
+`scripts/tmp-shot.mjs`, delete after) or Node won't resolve `playwright`;
+the scratchpad directory does NOT work. Template:
+
+```js
+import { chromium } from 'playwright'
+import { resolve } from 'node:path'
+import { sampleCharacter, STORAGE_KEY } from './seed-character.mjs'
+
+const browser = await chromium.launch()
+const ctx = await browser.newContext({ viewport: { width: 1180, height: 820 }, deviceScaleFactor: 2 })
+const seed = JSON.stringify({ characters: [sampleCharacter], activeId: sampleCharacter.id })
+await ctx.addInitScript(([k, s]) => localStorage.setItem(k, s), [STORAGE_KEY, seed])
+const page = await ctx.newPage()
+await page.goto('http://localhost:5173/Character-Sheet/#/sheet/features')
+await page.reload() // fresh mount so the seed is read
+await page.waitForTimeout(400)
+await page.getByRole('button', { name: /Adroit Analysis/ }).first().click()
+await page.waitForTimeout(400)
+await page.screenshot({ path: resolve(import.meta.dirname, '../screenshots/panel.png') })
+await browser.close()
+```
+
+Note: pages scroll inside `.main`, so `fullPage: true` does NOT capture
+below the fold — `scrollIntoViewIfNeeded()` the element you care about.
+
 ## How it works / gotchas
 
 - `scripts/screenshot.mjs` — the runner. It seeds `localStorage` via
